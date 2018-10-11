@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en"><head>  
+<html lang="en"><head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>Computer Vision Class Project
-  | ECE, Virginia Tech | Fall 2015: ECE 5554/4984</title>
+  <title>Painting Detector
+  | CS, Georgia Tech | Fall 2018: CS 4476</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
 
-<!-- Le styles -->  
+<!-- Le styles -->
   <link href="css/bootstrap.css" rel="stylesheet">
 <style>
 body {
@@ -21,7 +21,7 @@ color: #3366CC;
 color: #FF9900;
 }
 </style>
-  
+
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]>
@@ -33,25 +33,35 @@ color: #FF9900;
 <div class="container">
 <div class="page-header">
 
-<!-- Title and Name --> 
-<h1>Your Title Here</h1> 
-<span style="font-size: 20px; line-height: 1.5em;"><strong>Your Name Here</strong></span><br>
-<span style="font-size: 18px; line-height: 1.5em;">Fall 2015 ECE 5554/4984 Computer Vision: Class Project</span><br>
-<span style="font-size: 18px; line-height: 1.5em;">Virginia Tech</span>
+<!-- Title and Name -->
+<h1>Painting Detector</h1>
+<span style="font-size: 20px; line-height: 1.5em;"><strong>Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl Mubarak, & Vivekanand Rajasekar</strong></span><br>
+<span style="font-size: 18px; line-height: 1.5em;">Fall 2018 CS 4476 Computer Vision: Painting Detector</span><br>
+<span style="font-size: 18px; line-height: 1.5em;">Georgia Tech</span>
 <hr>
-
-Please see <a href="http://vision.cs.utexas.edu/projects/adapted_attributes/">this</a> for an example of how to lay out the various details of your project. You may need to provide more details than this, beause you will not be submitting an associated paper to accompany the webpage. So the page should be self-contained
 
 <!-- Goal -->
 <h3>Abstract</h3>
 
-One or two sentences on the motivation behind the problem you are solving. One or two sentences describing the approach you took. One or two sentences on the main result you obtained.
+This project will demonstrate a system that uses computer vision techniques in
+order to help museum goers learn about the paintings they see. The system will
+work by having users take photos of—or with—the paintings they like or want to
+learn more about. Our system will then take as input these images and, using a
+variety of known-techniques, find the painting’s match if it exists in the
+database. The output of the system will be the original painting, as well as
+information detailing the painting—it’s creator and a description of painting.
+The authors of this paper believe that this will be a valuable and important
+tool, allowing museum visitors to focus on seeing art while they’re at the
+museum and learning more about their favorite pieces at home. In order to label
+these paintings well, we will analyze several different computer vision
+approaches, focusing on efficiency and accuracy.
+
 <br><br>
 <!-- figure -->
 <h3>Teaser figure</h3>
 A figure that conveys the main idea behind the project or the main application being addressed.
 <br><br>
-<!-- Main Illustrative Figure --> 
+<!-- Main Illustrative Figure -->
 <div style="text-align: center;">
 <img style="height: 200px;" alt="" src="mainfig.png">
 </div>
@@ -64,7 +74,56 @@ Motivation behind the problem you are solving, what applications it has, any bri
 <br><br>
 <!-- Approach -->
 <h3>Approach</h3>
-Describe very clearly and systematically your approach to solve the problem. Tell us exactly what existing implementations you used to build your system. Tell us what obstacles you faced and how you addressed them. Justify any design choices or judgment calls you made in your approach.
+We have identified several approaches we will use to detect paintings—texture
+analysis, edge detection, color analysis, and feature detection. We shall first
+tune each of these different approaches to the images. Then, we shall use a
+combination of these approaches to find an efficient algorithm that labels as
+many paintings correctly as possible.
+<br><br>
+
+<u>Method 1 - Texture</u>
+<br><br>
+Texture analysis will improve the overall result of our system since different
+paintings may have similar colors and features, but may be of two different
+mediums. For example, oils paints are thicker than watercolor paints. Even though
+an oil painting of a city landscape contains the same features and colors as a
+watercolor painting of the same city landscape, the texture of the oil painting
+may be more rugged than the watercolor paintings. <br><br>
+We plan on running a set of diverse filters on every pixel of each image in our
+database, then concatenating the filtered values together to form an
+M x N x k matrix, where k is the number of filters and M, N are the dimensions
+of the image. We will have one M x N x k matrix for every image in our dataset.
+When an image is inputted into our system, we will apply each filter in our
+filter bank to produce an M x N x k matrix for the input. We will then compute
+the sum of the squared distances to find the painting in our dataset with the
+smallest euclidean distance to our input, which will be the most
+similar-painting. Rather than implementing this process ourselves, we plan to
+use OpenCV and OpenGL. <br><br>
+The authors believe that this approach individually may not give us the result
+we desire due to the difficulty in capturing the texture of a painting through
+a picture of it: several factors, such as lighting, may obscure the textures.
+However, it could be used in narrowing down on possible matches.
+<br><br>
+
+<u>Method 2 - Edges</u>
+<br><br>
+Edge detection will aid in narrowing down on the painting style or time period that the painting originated from. Paintings from different time periods vary in edge style. While modernist paintings incorporate more structured and prominent edges, paintings from eras such as Impressionism use softer and less prominent edges. We will utilize Canny Edge Detection to analyze these paintings as it aids in detecting a wide range of edges.
+The dataset we are using is categorized by time period, so we plan to preprocess a sample of paintings from each time period to determine the period’s edge characteristics. Then for each input image, we can use Canny Edge Detection to find the closest match. We will have to be careful with the threshold used in Canny Edge Detection, as we do not want to completely loose any soft edge information. The threshold will have to be low enough to be able to detect soft edges, so the intensity of each detected edge can help accurately identify edge characteristics and ultimately the time period that the painting could have originated from. We will utilize OpenCV for the Canny Edge Detection. While this approach will not guarantee an exact match for a given input image, it will aid in narrowing down on specific time period that the painting could have belonged to.
+
+<br><br>
+
+<u>Method 3 - Color</u>
+<br><br>
+Another approach that we will be looking at is analyzing the colors in the image to classify the paintings. A basic approach might entail simply summing up the pixel values for each of the R, G, and B channels and looking for images that have similar intensity values. A slightly more robust solution might entail a histogram of pixel color combinations and matching the input image with other pictures that have similar histograms of the pixel colors. However, a much more robust classification based on the colors of the images could be achieved using neural networks. If we train our classifier to remember the color values of the pixels given a set of images, then, based on an input image’s color values, we can predict which of the image this is coming from. We can use methods in scikit to implement the neural network, and certain methods in OpenCV to derive the color values of an image.
+
+<a href="http://www.primaryobjects.com/2013/06/17/an-intelligent-approach-to-image-classification-by-color/">View Source</a>
+
+<br><br>
+
+<u>Method 4 - Features</u>
+<br><br>
+We plan to use feature detection as another part of our approach for scoring paintings to see which one is our target painting. Using this, we can easily track specific patterns and features between our sample photos and the target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected by translation, rotation, and illumination, of the images to effectively find matches between images. Blob detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is useful because the “blobs” that are found are fairly consistent across images. When looking to find matches between images, these “blobs” are very similar to corners in that they are not as affected by translation, rotation, and illumination. We will make use of available methods contained in the OpenCV library for this portion of our project.
+<br><br>
 
 <br><br>
 <!-- Results -->
@@ -73,7 +132,7 @@ Provide details about the experimental set up (number of images/videos, number o
 
 <br><br>
 
-<!-- Main Results Figure --> 
+<!-- Main Results Figure -->
 <div style="text-align: center;">
 <img style="height: 300px;" alt="" src="results.png">
 </div>
@@ -84,7 +143,7 @@ Provide details about the experimental set up (number of images/videos, number o
 Show several visual examples of inputs/outputs of your system (success cases and failures) that help us better understand your approach.
 <br><br>
 
-<!-- Main Results Figure --> 
+<!-- Main Results Figure -->
 <div style="text-align: center;">
 <img style="height: 300px;" alt="" src="qual_results.png">
 </div>
@@ -94,7 +153,7 @@ Show several visual examples of inputs/outputs of your system (success cases and
 
 
   <hr>
-  <footer> 
+  <footer>
   <p>© You Name Here</p>
   </footer>
 </div>
