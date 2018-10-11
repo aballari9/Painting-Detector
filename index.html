@@ -105,12 +105,16 @@ we desire due to the difficulty in capturing the texture of a painting through
 a picture of it: several factors, such as lighting, may obscure the textures.
 However, it could be used in narrowing down on possible matches.
 <br><br>
+<img style="height: 200px;" alt="" src="texture.jpg">
+<br><br>
 
 <u>Method 2 - Edges</u>
 <br><br>
 Edge detection will aid in narrowing down on the painting style or time period that the painting originated from. Paintings from different time periods vary in edge style. While modernist paintings incorporate more structured and prominent edges, paintings from eras such as Impressionism use softer and less prominent edges. We will utilize Canny Edge Detection to analyze these paintings as it aids in detecting a wide range of edges.
 The dataset we are using is categorized by time period, so we plan to preprocess a sample of paintings from each time period to determine the period’s edge characteristics. Then for each input image, we can use Canny Edge Detection to find the closest match. We will have to be careful with the threshold used in Canny Edge Detection, as we do not want to completely loose any soft edge information. The threshold will have to be low enough to be able to detect soft edges, so the intensity of each detected edge can help accurately identify edge characteristics and ultimately the time period that the painting could have originated from. We will utilize OpenCV for the Canny Edge Detection. While this approach will not guarantee an exact match for a given input image, it will aid in narrowing down on specific time period that the painting could have belonged to.
 
+<br><br>
+<img style="height: 200px;" alt="" src="edge.jpg">
 <br><br>
 
 <u>Method 3 - Color</u>
@@ -120,11 +124,15 @@ Another approach that we will be looking at is analyzing the colors in the image
 <a href="http://www.primaryobjects.com/2013/06/17/an-intelligent-approach-to-image-classification-by-color/">View Source</a>
 
 <br><br>
+<img style="height: 200px;" alt="" src="color.png">
+<br><br>
 
 <u>Method 4 - Features</u>
 <br><br>
 We plan to use feature detection as another part of our approach for scoring paintings to see which one is our target painting. Using this, we can easily track specific patterns and features between our sample photos and the target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected by translation, rotation, and illumination, of the images to effectively find matches between images. Blob detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is useful because the “blobs” that are found are fairly consistent across images. When looking to find matches between images, these “blobs” are very similar to corners in that they are not as affected by translation, rotation, and illumination. We will make use of available methods contained in the OpenCV library for this portion of our project.
 
+<br><br>
+<img style="height: 200px;" alt="" src="feature.png">
 <br><br>
 
 <!-- Experiments and Results -->
