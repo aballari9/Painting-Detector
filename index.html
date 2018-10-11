@@ -43,6 +43,22 @@ color: #FF9900;
 <!-- Goal -->
 <h3>Abstract</h3>
 
+INSERT ABSTRACT
+
+<br><br>
+<!-- figure -->
+<h3>Teaser figure</h3>
+INSERT TEASER FIGURE
+<br><br>
+<!-- Main Illustrative Figure -->
+<div style="text-align: center;">
+<img style="height: 200px;" alt="" src="mainfig.png">
+</div>
+
+<br><br>
+<!-- Introduction -->
+<h3>Introduction</h3>
+
 This project will demonstrate a system that uses computer vision techniques in
 order to help museum goers learn about the paintings they see. The system will
 work by having users take photos of—or with—the paintings they like or want to
@@ -55,21 +71,6 @@ tool, allowing museum visitors to focus on seeing art while they’re at the
 museum and learning more about their favorite pieces at home. In order to label
 these paintings well, we will analyze several different computer vision
 approaches, focusing on efficiency and accuracy.
-
-<br><br>
-<!-- figure -->
-<h3>Teaser figure</h3>
-A figure that conveys the main idea behind the project or the main application being addressed.
-<br><br>
-<!-- Main Illustrative Figure -->
-<div style="text-align: center;">
-<img style="height: 200px;" alt="" src="mainfig.png">
-</div>
-
-<br><br>
-<!-- Introduction -->
-<h3>Introduction</h3>
-Motivation behind the problem you are solving, what applications it has, any brief background on the particular domain you are working in (if not regular RBG photographs), etc. If you are using a new way to solve an existing problem, briefly mention and describe the existing approaches and tell us how your approach is new.
 
 <br><br>
 <!-- Approach -->
@@ -123,38 +124,64 @@ Another approach that we will be looking at is analyzing the colors in the image
 <u>Method 4 - Features</u>
 <br><br>
 We plan to use feature detection as another part of our approach for scoring paintings to see which one is our target painting. Using this, we can easily track specific patterns and features between our sample photos and the target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected by translation, rotation, and illumination, of the images to effectively find matches between images. Blob detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is useful because the “blobs” that are found are fairly consistent across images. When looking to find matches between images, these “blobs” are very similar to corners in that they are not as affected by translation, rotation, and illumination. We will make use of available methods contained in the OpenCV library for this portion of our project.
-<br><br>
 
 <br><br>
-<!-- Results -->
+
+<!-- Experiments and Results -->
 <h3>Experiments and results</h3>
-Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
+
+<u>Experimental Setup</u>
+<br><br>
+We will pre-analyze the images in the WikiArt dataset using the approaches described above to get a set of characteristics for each picture. Then for each input image, we will analyze the image using various approaches to find the best match.
 
 <br><br>
 
-<!-- Main Results Figure -->
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="results.png">
-</div>
+<u>Data Sets</u>
+<br><br>
+INSERT DATA SET INFORMATION
+
 <br><br>
 
-<!-- Results -->
-<h3>Qualitative results</h3>
-Show several visual examples of inputs/outputs of your system (success cases and failures) that help us better understand your approach.
+<u>Code Structure</u>
+<br><br>
+Our objective is to find the best approach for classifying paintings, and thus, we will utilize OpenCV, OpenGL, and Scikit for implementing most of the approaches mentioned. However, since some of the approaches require a more specific analysis technique, such as creating a neural network to analyze color, we will also have to do some implementation.
+
 <br><br>
 
-<!-- Main Results Figure -->
-<div style="text-align: center;">
-<img style="height: 300px;" alt="" src="qual_results.png">
-</div>
+<u>Definition of Success</u>
 <br><br>
+Success is defined by finding an input’s match using one or more of the approaches mentioned above. In doing so, we hope to find the approach or combination of approaches that correctly finds the corresponding picture for the highest percentage of input images.
+
+<br><br>
+
+<u>Data Collection Protocol</u>
+<br><br>
+As of now, we plan to use the WikiArt database containing famous paintings to check our sample images against. Each painting will be accompanied by the artist’s name and a brief description of the painting. When a match is found, those pieces of information along with a photo of the painting will be returned to the user. This is because our intended purpose for this project is that if someone is at a museum but not close enough to a picture to read about it, they would be able to take a photo of it, specify the corners, and read about it from where they are.
+
+<br><br>
+
+<u>List of Experiments</u>
+<br><br>
+INSERT LIST OF EXPERIMENTS
+<br><br>
+
+<u>Expectations and Uncertainty in Results</u>
+
+<br><br>
+We expect that weighing the texture the highest will yield us with the best results. This is because the texture of an image, from our knowledge of paintings, tells the most about the unique painting’s content. After that, the second-highest weights would belong to using edges. This is because the edges are a unique identifier to any image and will uniquely identify each painting. We are confident that no two paintings have identical sets of edges. After that, we expect the features to be weighted since features would also uniquely identify each of the paintings. Most paintings should be identifiable by unique features which the blob detection should be able to identify. Lastly, color detection will be used to measure the varying presence of different colors. We predict this will have the least weight since many paintings from similar eras have the same colors. This would throw off our color detector and leave us with results that might not be completely accurate. However, it would still be useful in order to break ties when maybe the edges are matching, but simply the colors are different.
+
+To quantify the results of the experiments, we will simply see which combination of the different features provides the best classifier. In other words, accuracy in classification will be our primary metric for determining the result of our experiments. In addition to that, we also plan to use run-time as another metric: if a set of approaches has high accuracy but takes significantly longer to run than other approaches with slightly lower accuracies, time will be taken into consideration.
+
+<br><br>
+
+
 
 
 
 
   <hr>
   <footer>
-  <p>© You Name Here</p>
+  <p>© Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl Mubarak, & Vivekanand Rajasekar</p>
   </footer>
 </div>
 </div>
