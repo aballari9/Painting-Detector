@@ -1,200 +1,295 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+
+<head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <title>Painting Detector
-  | CS, Georgia Tech | Fall 2018: CS 4476</title>
+    | CS, Georgia Tech | Fall 2018: CS 4476</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
 
-<!-- Le styles -->
+  <!-- Le styles -->
   <link href="css/bootstrap.css" rel="stylesheet">
-<style>
-body {
-padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-}
-.vis {
-color: #3366CC;
-}
-.data {
-color: #FF9900;
-}
-</style>
+  <style>
+    body {
+      padding-top: 60px;
+      /* 60px to make the container go all the way to the bottom of the topbar */
+    }
 
-<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    .vis {
+      color: #3366CC;
+    }
 
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]>
+    .data {
+      color: #FF9900;
+    }
+  </style>
+
+  <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 </head>
 
 <body>
-<div class="container">
-<div class="page-header">
+  <div class="container">
+    <div class="page-header">
 
-<!-- Title and Name -->
-<h1>Painting Detector</h1>
-<span style="font-size: 20px; line-height: 1.5em;"><strong>Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl Mubarak, Vivekanand Rajasekar</strong></span><br>
-<span style="font-size: 20px; line-height: 1.5em;"><strong>aballari6, hbellala3, rbhat35, cmubarak3, vrajasekar6</strong></span><br>
-<span style="font-size: 18px; line-height: 1.5em;">Fall 2018 CS 4476 Computer Vision: Painting Detector</span><br>
-<span style="font-size: 18px; line-height: 1.5em;">Georgia Tech</span>
-<hr>
+      <!-- Title and Name -->
+      <h1>Painting Detector</h1>
+      <span style="font-size: 20px; line-height: 1.5em;"><strong>Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl
+          Mubarak, Vivekanand Rajasekar</strong></span><br>
+      <span style="font-size: 20px; line-height: 1.5em;"><strong>aballari6, hbellala3, rbhat35, cmubarak3, vrajasekar6</strong></span><br>
+      <span style="font-size: 18px; line-height: 1.5em;">Fall 2018 CS 4476 Computer Vision: Painting Detector</span><br>
+      <span style="font-size: 18px; line-height: 1.5em;">Georgia Tech</span>
+      <hr>
 
-<!-- Goal -->
-<h3>Abstract</h3>
+      <!-- Main Illustrative Figure -->
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="sketchMona.png">
+        or
+        <img style="height: 200px;" alt="" src="monaLisaPhoto.jpg">
+        ==>
+        <img style="height: 200px;" alt="" src="monaLisa.jpg">
+        Mona Lisa by Leonardo da Vinci (1503)
+      </div>
 
-INSERT ABSTRACT
+      <br><br>
+      <!-- Introduction -->
+      <h3>Introduction</h3>
 
-<br><br>
-<!-- figure -->
-<h3>Teaser figure</h3>
-INSERT TEASER FIGURE
-<br><br>
-<!-- Main Illustrative Figure -->
-<div style="text-align: center;">
-<img style="height: 200px;" alt="" src="mainfig.png">
-</div>
+      This project will demonstrate a system that uses computer vision techniques in
+      order to help museum goers learn about the paintings they see. The system will
+      work by having users take photos of—or with—the paintings they like or want to
+      learn more about. Our system will then take as input these images and, using a
+      variety of known-techniques, find the painting’s match if it exists in the
+      database. The output of the system will be the original painting, as well as
+      information detailing the painting—it’s creator and a description of painting.
+      The authors of this paper believe that this will be a valuable and important
+      tool, allowing museum visitors to focus on seeing art while they’re at the
+      museum and learning more about their favorite pieces at home. In order to label
+      these paintings well, we will analyze several different computer vision
+      approaches, focusing on efficiency and accuracy.
 
-<br><br>
-<!-- Introduction -->
-<h3>Introduction</h3>
+      <br><br>
+      <!-- Approach -->
+      <h3>Approach</h3>
+      We have identified several approaches we will use to detect paintings—texture
+      analysis, edge detection, color analysis, and feature detection. We shall first
+      tune each of these different approaches to the images. Then, we shall use a
+      combination of these approaches to find an efficient algorithm that labels as
+      many paintings correctly as possible.
+      <br><br>
 
-This project will demonstrate a system that uses computer vision techniques in
-order to help museum goers learn about the paintings they see. The system will
-work by having users take photos of—or with—the paintings they like or want to
-learn more about. Our system will then take as input these images and, using a
-variety of known-techniques, find the painting’s match if it exists in the
-database. The output of the system will be the original painting, as well as
-information detailing the painting—it’s creator and a description of painting.
-The authors of this paper believe that this will be a valuable and important
-tool, allowing museum visitors to focus on seeing art while they’re at the
-museum and learning more about their favorite pieces at home. In order to label
-these paintings well, we will analyze several different computer vision
-approaches, focusing on efficiency and accuracy.
+      <u>Method 1 - Texture</u>
+      <br><br>
+      Texture analysis will improve the overall result of our system since different
+      paintings may have similar colors and features, but may be of two different
+      mediums. For example, oils paints are thicker than watercolor paints. Even though
+      an oil painting of a city landscape contains the same features and colors as a
+      watercolor painting of the same city landscape, the texture of the oil painting
+      may be more rugged than the watercolor paintings. <br><br>
+      We plan on running a set of diverse filters on every pixel of each image in our
+      database, then concatenating the filtered values together to form an
+      M x N x k matrix, where k is the number of filters and M, N are the dimensions
+      of the image. We will have one M x N x k matrix for every image in our dataset.
+      When an image is inputted into our system, we will apply each filter in our
+      filter bank to produce an M x N x k matrix for the input. We will then compute
+      the sum of the squared distances to find the painting in our dataset with the
+      smallest euclidean distance to our input, which will be the most
+      similar-painting. Rather than implementing this process ourselves, we plan to
+      use OpenCV and OpenGL. <br><br>
+      The authors believe that this approach individually may not give us the result
+      we desire due to the difficulty in capturing the texture of a painting through
+      a picture of it: several factors, such as lighting, may obscure the textures.
+      However, it could be used in narrowing down on possible matches.
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="texture.jpg">
+      </div>
 
-<br><br>
-<!-- Approach -->
-<h3>Approach</h3>
-We have identified several approaches we will use to detect paintings—texture
-analysis, edge detection, color analysis, and feature detection. We shall first
-tune each of these different approaches to the images. Then, we shall use a
-combination of these approaches to find an efficient algorithm that labels as
-many paintings correctly as possible.
-<br><br>
+      <br><br>
 
-<u>Method 1 - Texture</u>
-<br><br>
-Texture analysis will improve the overall result of our system since different
-paintings may have similar colors and features, but may be of two different
-mediums. For example, oils paints are thicker than watercolor paints. Even though
-an oil painting of a city landscape contains the same features and colors as a
-watercolor painting of the same city landscape, the texture of the oil painting
-may be more rugged than the watercolor paintings. <br><br>
-We plan on running a set of diverse filters on every pixel of each image in our
-database, then concatenating the filtered values together to form an
-M x N x k matrix, where k is the number of filters and M, N are the dimensions
-of the image. We will have one M x N x k matrix for every image in our dataset.
-When an image is inputted into our system, we will apply each filter in our
-filter bank to produce an M x N x k matrix for the input. We will then compute
-the sum of the squared distances to find the painting in our dataset with the
-smallest euclidean distance to our input, which will be the most
-similar-painting. Rather than implementing this process ourselves, we plan to
-use OpenCV and OpenGL. <br><br>
-The authors believe that this approach individually may not give us the result
-we desire due to the difficulty in capturing the texture of a painting through
-a picture of it: several factors, such as lighting, may obscure the textures.
-However, it could be used in narrowing down on possible matches.
-<br><br>
-<img style="height: 200px;" alt="" src="texture.jpg">
-<br><br>
+      <u>Method 2 - Edges</u>
+      <br><br>
+      Edge detection will aid in narrowing down on the painting style or time period that the painting originated from.
+      Paintings from different time periods vary in edge style. While modernist paintings incorporate more structured
+      and prominent edges, paintings from eras such as Impressionism use softer and less prominent edges. We will
+      utilize Canny Edge Detection to analyze these paintings as it aids in detecting a wide range of edges.
+      The dataset we are using is categorized by time period, so we plan to preprocess a sample of paintings from each
+      time period to determine the period’s edge characteristics. Then for each input image, we can use Canny Edge
+      Detection to find the closest match. We will have to be careful with the threshold used in Canny Edge Detection,
+      as we do not want to completely loose any soft edge information. The threshold will have to be low enough to be
+      able to detect soft edges, so the intensity of each detected edge can help accurately identify edge
+      characteristics and ultimately the time period that the painting could have originated from. We will utilize
+      OpenCV for the Canny Edge Detection. While this approach will not guarantee an exact match for a given input
+      image, it will aid in narrowing down on specific time period that the painting could have belonged to.
 
-<u>Method 2 - Edges</u>
-<br><br>
-Edge detection will aid in narrowing down on the painting style or time period that the painting originated from. Paintings from different time periods vary in edge style. While modernist paintings incorporate more structured and prominent edges, paintings from eras such as Impressionism use softer and less prominent edges. We will utilize Canny Edge Detection to analyze these paintings as it aids in detecting a wide range of edges.
-The dataset we are using is categorized by time period, so we plan to preprocess a sample of paintings from each time period to determine the period’s edge characteristics. Then for each input image, we can use Canny Edge Detection to find the closest match. We will have to be careful with the threshold used in Canny Edge Detection, as we do not want to completely loose any soft edge information. The threshold will have to be low enough to be able to detect soft edges, so the intensity of each detected edge can help accurately identify edge characteristics and ultimately the time period that the painting could have originated from. We will utilize OpenCV for the Canny Edge Detection. While this approach will not guarantee an exact match for a given input image, it will aid in narrowing down on specific time period that the painting could have belonged to.
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="edge.jpg">
+      </div>
 
-<br><br>
-<img style="height: 200px;" alt="" src="edge.jpg">
-<br><br>
+      <br><br>
 
-<u>Method 3 - Color</u>
-<br><br>
-Another approach that we will be looking at is analyzing the colors in the image to classify the paintings. A basic approach might entail simply summing up the pixel values for each of the R, G, and B channels and looking for images that have similar intensity values. A slightly more robust solution might entail a histogram of pixel color combinations and matching the input image with other pictures that have similar histograms of the pixel colors. However, a much more robust classification based on the colors of the images could be achieved using neural networks. If we train our classifier to remember the color values of the pixels given a set of images, then, based on an input image’s color values, we can predict which of the image this is coming from. We can use methods in scikit to implement the neural network, and certain methods in OpenCV to derive the color values of an image.
+      <u>Method 3 - Color</u>
+      <br><br>
+      Another approach that we will be looking at is analyzing the colors in the image to classify the paintings. A
+      basic approach might entail simply summing up the pixel values for each of the R, G, and B channels and looking
+      for images that have similar intensity values. A slightly more robust solution might entail a histogram of pixel
+      color combinations and matching the input image with other pictures that have similar histograms of the pixel
+      colors. However, a much more robust classification based on the colors of the images could be achieved using
+      neural networks. If we train our classifier to remember the color values of the pixels given a set of images,
+      then, based on an input image’s color values, we can predict which of the image this is coming from. We can use
+      methods in scikit to implement the neural network, and certain methods in OpenCV to derive the color values of an
+      image.
 
-<a href="http://www.primaryobjects.com/2013/06/17/an-intelligent-approach-to-image-classification-by-color/">View Source</a>
+      <a href="http://www.primaryobjects.com/2013/06/17/an-intelligent-approach-to-image-classification-by-color/">View
+        Source</a>
 
-<br><br>
-<img style="height: 200px;" alt="" src="color.png">
-<br><br>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="color.png"></div>
+      <br><br>
 
-<u>Method 4 - Features</u>
-<br><br>
-We plan to use feature detection as another part of our approach for scoring paintings to see which one is our target painting. Using this, we can easily track specific patterns and features between our sample photos and the target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected by translation, rotation, and illumination, of the images to effectively find matches between images. Blob detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is useful because the “blobs” that are found are fairly consistent across images. When looking to find matches between images, these “blobs” are very similar to corners in that they are not as affected by translation, rotation, and illumination. We will make use of available methods contained in the OpenCV library for this portion of our project.
+      <u>Method 4 - Features</u>
+      <br><br>
+      We plan to use feature detection as another part of our approach for scoring paintings to see which one is our
+      target painting. Using this, we can easily track specific patterns and features between our sample photos and the
+      target paintings. Features will be areas with the maximum variation when moved in all the regions around it.
+      Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection
+      is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected
+      by translation, rotation, and illumination, of the images to effectively find matches between images. Blob
+      detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a
+      regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is
+      useful because the “blobs” that are found are fairly consistent across images. When looking to find matches
+      between images, these “blobs” are very similar to corners in that they are not as affected by translation,
+      rotation, and illumination. We will make use of available methods contained in the OpenCV library for this
+      portion of our project.
 
-<br><br>
-<img style="height: 200px;" alt="" src="feature.png">
-<br><br>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="feature.png">
+      </div>
+      <br><br>
 
-<!-- Experiments and Results -->
-<h3>Experiments and results</h3>
+      <!-- Experiments and Results -->
+      <h3>Experiments and results</h3>
 
-<u>Experimental Setup</u>
-<br><br>
-We will pre-analyze the images in the WikiArt dataset using the approaches described above to get a set of characteristics for each picture. Then for each input image, we will analyze the image using various approaches to find the best match.
+      <u>Experimental Setup</u>
+      <br><br>
+      We will pre-analyze the images in the WikiArt dataset using the approaches described above to get a set of
+      characteristics for each picture. Then for each input image, we will analyze the image using various approaches
+      to find the best match.
 
-<br><br>
+      <br><br>
 
-<u>Data Sets</u>
-<br><br>
-INSERT DATA SET INFORMATION
+      <u>Data Sets</u>
+      <br><br>
 
-<br><br>
+      <ul>
+        <li>WikiArt - https://www.wikiart.org/
+          <ul>
+            <li>Paintings are categorized with the following labels:
+              <ul>
+                <li>
+                  Styles
+                </li>
+                <li>
+                  Genres
+                </li>
+                <li>
+                  Media
+                </li>
+              </ul>
+            </li>
+            <li>Some of the approaches will be used to narrow down on one or more of these categories, while others
+              will be used to specifically find a match in the specific category
+            </li>
+            <li>Each painting has an author and a brief description
+            </li>
+          </ul>
+        </li>
+      </ul>
 
-<u>Code Structure</u>
-<br><br>
-Our objective is to find the best approach for classifying paintings, and thus, we will utilize OpenCV, OpenGL, and Scikit for implementing most of the approaches mentioned. However, since some of the approaches require a more specific analysis technique, such as creating a neural network to analyze color, we will also have to do some implementation.
+      <u>Code Structure</u>
+      <br><br>
+      Our objective is to find the best approach for classifying paintings, and thus, we will utilize OpenCV, OpenGL,
+      and Scikit for implementing most of the approaches mentioned. However, since some of the approaches require a
+      more specific analysis technique, such as creating a neural network to analyze color, we will also have to do
+      some implementation.
 
-<br><br>
+      <br><br>
 
-<u>Definition of Success</u>
-<br><br>
-Success is defined by finding an input’s match using one or more of the approaches mentioned above. In doing so, we hope to find the approach or combination of approaches that correctly finds the corresponding picture for the highest percentage of input images.
+      <u>Definition of Success</u>
+      <br><br>
+      Success is defined by finding an input’s match using one or more of the approaches mentioned above. In doing so,
+      we hope to find the approach or combination of approaches that correctly finds the corresponding picture for the
+      highest percentage of input images.
 
-<br><br>
+      <br><br>
 
-<u>Data Collection Protocol</u>
-<br><br>
-As of now, we plan to use the WikiArt database containing famous paintings to check our sample images against. Each painting will be accompanied by the artist’s name and a brief description of the painting. When a match is found, those pieces of information along with a photo of the painting will be returned to the user. This is because our intended purpose for this project is that if someone is at a museum but not close enough to a picture to read about it, they would be able to take a photo of it, specify the corners, and read about it from where they are.
+      <u>Data Collection Protocol</u>
+      <br><br>
+      As of now, we plan to use the WikiArt database containing famous paintings to check our sample images against.
+      Each painting will be accompanied by the artist’s name and a brief description of the painting. When a match is
+      found, those pieces of information along with a photo of the painting will be returned to the user. This is
+      because our intended purpose for this project is that if someone is at a museum but not close enough to a picture
+      to read about it, they would be able to take a photo of it, specify the corners, and read about it from where
+      they are.
 
-<br><br>
+      <br><br>
 
-<u>List of Experiments</u>
-<br><br>
-INSERT LIST OF EXPERIMENTS
-<br><br>
+      <u>List of Experiments</u>
+      <ol>
+        <li>The goal of the first experiment would be to figure out a way to combine these various methods (color, texture, edge, features) such that we get a system with the highest accuracy. Our system will be composed of the results of the 4 methods each of which will be weighted a certain amount. To find these weights, the first experiment will execute a gradient descent algorithm with random restarts over a random subset of the dataset. We will repeat this 100 times and average those weights. 
+          </li>
+          <li>Another experiment would reveal to us the individual methods that are most successful (in case a combination is not required and is overfitting to the data; Occam and his razor have suggested this). This could be done simply by running each of the methods individually (a 100 times) on a random subset (of size 200) of the images. The best performing algorithm can then be chosen.
+            <ul>
+              <li>For the color method, we shall try each of the three techniques described to determine which is the optimal performer.</li>
+              <li>For the texture method, we shall try 50 different filters on random subsets of the images to determine which ones produce the best results.</li>
+              <li>For the edges method, we shall vary the gaussian sigma and the gaussian box to determine the optimal parameters for our purposes and given our dataset.
+                </li>
+              <li>Once the best combination of approaches is determined, we will test the accuracy of our painting detector by testing the algorithm on 200 randomly picked paintings and getting a percentage for the accuracy in finding a match. The detector will get a point for every painting that was matched correctly to the painting in the database.  </li>
+            </ul>
+          </li>
+      </ol>
 
-<u>Expectations and Uncertainty in Results</u>
+      <u>Expectations and Uncertainty in Results</u>
+  
 
-<br><br>
-We expect that weighing the texture the highest will yield us with the best results. This is because the texture of an image, from our knowledge of paintings, tells the most about the unique painting’s content. After that, the second-highest weights would belong to using edges. This is because the edges are a unique identifier to any image and will uniquely identify each painting. We are confident that no two paintings have identical sets of edges. After that, we expect the features to be weighted since features would also uniquely identify each of the paintings. Most paintings should be identifiable by unique features which the blob detection should be able to identify. Lastly, color detection will be used to measure the varying presence of different colors. We predict this will have the least weight since many paintings from similar eras have the same colors. This would throw off our color detector and leave us with results that might not be completely accurate. However, it would still be useful in order to break ties when maybe the edges are matching, but simply the colors are different.
+      <br><br>
+      We expect that weighing the texture the highest will yield us with the best results. This is because the texture
+      of an image, from our knowledge of paintings, tells the most about the unique painting’s content. After that, the
+      second-highest weights would belong to using edges. This is because the edges are a unique identifier to any
+      image and will uniquely identify each painting. We are confident that no two paintings have identical sets of
+      edges. After that, we expect the features to be weighted since features would also uniquely identify each of the
+      paintings. Most paintings should be identifiable by unique features which the blob detection should be able to
+      identify. Lastly, color detection will be used to measure the varying presence of different colors. We predict
+      this will have the least weight since many paintings from similar eras have the same colors. This would throw off
+      our color detector and leave us with results that might not be completely accurate. However, it would still be
+      useful in order to break ties when maybe the edges are matching, but simply the colors are different.
 
-To quantify the results of the experiments, we will simply see which combination of the different features provides the best classifier. In other words, accuracy in classification will be our primary metric for determining the result of our experiments. In addition to that, we also plan to use run-time as another metric: if a set of approaches has high accuracy but takes significantly longer to run than other approaches with slightly lower accuracies, time will be taken into consideration.
+      To quantify the results of the experiments, we will simply see which combination of the different features
+      provides the best classifier. In other words, accuracy in classification will be our primary metric for
+      determining the result of our experiments. In addition to that, we also plan to use run-time as another metric:
+      if a set of approaches has high accuracy but takes significantly longer to run than other approaches with
+      slightly lower accuracies, time will be taken into consideration.
 
-<br><br>
+      <br><br>
+      <hr>
+      <footer>
+        <p>© Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl Mubarak, Vivekanand Rajasekar</p>
+      </footer>
+    </div>
+  </div>
 
+  <br><br>
 
+</body>
 
-
-
-
-  <hr>
-  <footer>
-  <p>© Akhila Ballari, Hemanth Bellala, Raghav Bhat, Carl Mubarak, & Vivekanand Rajasekar</p>
-  </footer>
-</div>
-</div>
-
-<br><br>
-
-</body></html>
+</html>
