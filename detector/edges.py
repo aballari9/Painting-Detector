@@ -14,12 +14,14 @@ from skimage.color import rgb2gray
 # three-rocks - https://www.wikiart.org/en/john-ferren/three-rocks-1949
 # john-ferren - https://www.wikiart.org/en/john-ferren/untitled-1952-1
 
-
+inputImage = 'synchromy-in-orange'
+inputSigma = 1.2
 ratios = {}
 images = ['mystery-history', 'tomb', 'spectrum-colors', 'abstract', 'synchromy-in-orange',
             'triangle', 'two-edges', 'three-rocks', 'john-ferren']
 sigmas = [3.5, 1.8, 1, 2, 1.3, 2, 3, 2, 0.5]
 threshold = 0.1
+results = []
 
 def preprocessImages():
     for image in range(len(images)):
@@ -28,7 +30,7 @@ def preprocessImages():
         # displayOriginalAndEdges(im, edges)
         ratio = getEdgesRatio(edges, images[image])
         ratios[images[image]] = ratio
-    print 'ratios: ', ratios
+    # print 'ratios: ', ratios
 
 def getEdges(im, s):
     # Run Canny Edge Detector on input image and return edges
@@ -54,20 +56,35 @@ def getEdgesRatio(edges, name):
     return counts[1]/(counts[0] + counts[1])
 
 def findMatch(im, r):
-    results = []
     for image, ratio in ratios.iteritems():
         percentDifference = abs(r - ratio) / (0.5*(r + ratio))
         if percentDifference <= threshold:
             results.append(image)
     print 'results: ', results
 
+def displayMatches():
+    i = len(results) + 1
+    plt.suptitle("Matches for " + inputImage)
+    plt.subplot(2, len(results), 1)
+    plt.title("Input Image - " + inputImage)
+    plt.imshow(imread('../images/' + inputImage + '.jpg'))
+
+    for image in results:
+        plt.subplot(2, len(results), i)
+        plt.title("Output Image - " + image)
+        plt.imshow(imread('../images/' + image + '.jpg'))
+        i = i+1
+    plt.show()
+
+
 
 if __name__ == '__main__':
     preprocessImages()
 
-    im = imread('../images/abstract.jpg')
-    edges = getEdges(im, 1.5)
+    im = imread('../images/' + inputImage + '.jpg')
+    edges = getEdges(im, inputSigma)
     ratio = getEdgesRatio(edges, "abstract")
     print 'r: ', ratio
 
     findMatch(im, ratio)
+    displayMatches()
