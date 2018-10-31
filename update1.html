@@ -497,6 +497,20 @@
 
       <!-- Conclusion and Future Work -->
       <h3>Conclusion and Future Work</h3>
+      <u>Method 2 - Edges</u>
+      <br><br>
+      Finding matches utilizing edges does help narrow down on a set of images. This approach
+      works the best when distinguishing images with soft edges with images with hard edges.
+      However, it cannot be solely used for distinguish amongst images with similar hard edges.
+      The free parameter sigma is used to control how much to blur an input image and significantly
+      affects the the accuracy at which the images with soft edges are detected. Since this is an easier
+      parameter to control than threshold values for maximum supression, we decided to use skimage's Canny Edge detector
+      over OpenCV's Canny edge detector. This approach finds processed the small sample set and found matches relatively fast.
+      We will have to test the performance of this approach on a significantly larger data set of images with a
+      greater variety of edges. We will also explore if we can get more information other than the white pixel to total pixel
+      ratio from the canny edge detector. Finding matches though edge analysis is definitely impact full and will
+      be a significant componenent of the final painting detector.
+      <br><br>
 
       <u>Method 3 - Color</u>
       <br><br>
