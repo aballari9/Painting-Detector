@@ -186,18 +186,9 @@
 
       <u>Method 4 - Features</u>
       <br><br>
-      We plan to use feature detection as another part of our approach for scoring paintings to see which one is our
-      target painting. Using this, we can easily track specific patterns and features between our sample photos and the
-      target paintings. Features will be areas with the maximum variation when moved in all the regions around it.
-      Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection
-      is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected
-      by translation, rotation, and illumination, of the images to effectively find matches between images. Blob
-      detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a
-      regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is
-      useful because the “blobs” that are found are fairly consistent across images. When looking to find matches
-      between images, these “blobs” are very similar to corners in that they are not as affected by translation,
-      rotation, and illumination. We will make use of available methods contained in the OpenCV library for this
-      portion of our project.
+      We plan to use feature matching as another part of our approach for scoring paintings to see which one is our
+      target painting. Using this, we can easily track specific keypoints and descriptors between our sample photos and the
+      target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Using OpenCV's feature matching, we used a Fast Library for Approximate Nearest Neighbors (FLANN) based matcher to analyze the descriptors from the 2 images and match them up. Next, we filtered the matches so to eliminate outliers. Using the remaining matches, we could identify the features that matched between the two images.
 
       <br><br>
       <div style="text-align: center;">
@@ -456,11 +447,32 @@
 
       <u>Method 4 - Features</u>
       <br><br>
-      Experiments and Results for Features
+      For the feature matching imeplementation, we used OpenCV's feature matching tools. First, we used SIFT to detect all the keypoints and their descriptors, and then used k-nearest neighbors to pair features from the photo of the painting to features of the set of available paintings that it could be. For this update, we used a subset of 5 paintings. Below are the results for identifying both the Mona Lisa and the Van Gough Self Portrait from 1889.
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching1.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching2.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching3.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching4.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching5.png">
+      </div>
+      <br><br>
+      <center><i>Matching the Mona Lisa against 5 images.<i><center>
       <br><br>
 
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching1.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching2.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching3.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching4.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching5.png">
+      </div>
+      <br><br>
+      <center><i>Matching Van Gough Self Portrait 1889 against 5 images.<i><center>
+      <br><br>
+      As we can see from the results above, there are many more matches found between the photo of the Mona Lisa and the actual painting itself. The actual numbers show that there are 34 matches with the Mona Lisa, and only 4, 2, 1, and 2 for the following 4 images respectively.
 
-
+      <br><br>
 
       <!-- Qualitative Results -->
       <h3>Qualitative Results</h3>
@@ -532,6 +544,11 @@
       best bin-size is that optimizes the scores generated.
       <br><br>
 
+      <u>Method 4 - Feature</u>
+      <br><br>
+      From feature matching, we can conclude that it is in itself a valuable tool for matching the photos to paintings. In both experiments, the correct painting had a significantly larger number of matches than the other paintings. We beleive, as of now, that feature matching will be very valuable in the remainder of this project.
+
+      <br><br>
 
       <!-- References -->
       <h3>References</h3>
