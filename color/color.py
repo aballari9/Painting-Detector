@@ -53,7 +53,7 @@ for imagePath in image_files:
 
     print hist.shape
     print hist
-    # plt.imshow(hist)
+    plt.imshow(hist)
     plt.show()
 
 
