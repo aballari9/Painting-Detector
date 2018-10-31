@@ -214,8 +214,37 @@
       Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
 
       <br><br>
-
       <h4>Approach 3 - Color</h4>
+      <h5> 1. Histogram Differences </h4>
+        <ol>
+        <li>In this approach, we first generate a histogram for each of the images in our dataset. We are using 8 bins for each of the RGB channels and allocate each pixel to three bins.</li>
+        <li>Given a query image, we generate a histogram for this image.</li>
+        <li>We compare the two histograms using these 4 methodologies:
+          <ol>
+            <li>
+                Correlation
+            </li>
+            <li>
+                Chi-Squared Distance
+            </li>
+            <li>
+              Intersection
+            </li>
+            <li>
+                Bhattacharyya Distance
+            </li>
+            <li>
+                Hellinger Distance
+            </li>
+          </ol>
+        </li>
+        <li>
+        We can then analyse the different scores of the system for each of the methodologies.
+        </li>
+        </ol>
+
+
+
       <br><br>
 
 
