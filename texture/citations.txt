@@ -25,6 +25,14 @@ http://www.spring4sims.com/wp-content/uploads/2010/12/Mona-Lisa.jpg
 mona 3:
 https://cdn.dnaindia.com/sites/default/files/styles/full/public/2015/12/08/402790-mona-lisa.jpg
 
+dali 1:
+https://arthive.com/res/media/img/oy1200/work/283/457113.jpg
+
+dali 2:
+http://www.paintinghere.com/UploadPic/Salvador%20Dali/big/Woman%20With%20Head%20of%20Roses.jpg
+
+dali 3:
+https://imgcs.artprintimages.com/img/print/print/salvador-dali-woman-with-a-head-of-roses_a-l-1296006-0.jpg?w=550&h=550
 
 
 
