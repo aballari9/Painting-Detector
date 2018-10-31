@@ -1300,6 +1300,15 @@ textarea[class*="span"],
   margin-left: 0;
 }
 
+table, th, td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+table > *:first-child:not(thead) td:first-child {
+  font-weight: bold;
+}
+
 .input-append input[class*="span"],
 .input-append .uneditable-input[class*="span"],
 .input-prepend input[class*="span"],

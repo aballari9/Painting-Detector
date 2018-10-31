@@ -51,10 +51,13 @@ for imagePath in image_files:
     hist = cv2.normalize(hist, hist).flatten()
     index[filename] = hist
 
-    print hist.shape
-    print hist
-    plt.imshow(hist)
-    plt.show()
+    img = cv2.imread(imagePath)
+    color = ('b','g','r')
+    for i,col in enumerate(color):
+        histr = cv2.calcHist([img],[i],None,[256],[0,256])
+        plt.plot(histr,color = col)
+        plt.xlim([0,256])
+        plt.show()
 
 
 

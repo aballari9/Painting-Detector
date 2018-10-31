@@ -303,46 +303,30 @@
 
       <br><br>
 
-      <h4>Approach 3 - Color</h4>
-      <h5> 1. Histogram Differences </h4>
-        <ol>
-        <li>In this approach, we first generate a histogram for each of the images in our dataset. We are using 8 bins for each of the RGB channels and allocate each pixel to three bins.</li>
-        <li>Given a query image, we generate a histogram for this image.</li>
-        <li>We compare the two histograms using these 4 methodologies:
-          <ol>
-            <li>
-                Correlation
-            </li>
-            <li>
-                Chi-Squared Distance
-            </li>
-            <li>
-              Intersection
-            </li>
-            <li>
-                Bhattacharyya Distance
-            </li>
-            <li>
-                Hellinger Distance
-            </li>
-          </ol>
-        </li>
-        <li>
-        We can then analyse the different scores of the system for each of the methodologies.
-        </li>
-        </ol>
-
-
       <u>Method 3 - Color</u>
-      <br><br>
-      Experiments and Results for Color
 
-             <h4>Approach 3 - Color</h4>
-      <h5> 1. Histogram Differences </h4>
+      <h4>Approach 3 - Color</h4>
+      <h5> Dataset </h4>
+      For the midterm update, the color has only been updated on a smaller subset of the full dataset.
+      We are testing it with these 4 images for now to analyze the results closely before we move to
+      the full dataset. The first image serves as the query.
+
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="color/images/monaLisa_museum.jpg">
+        <img style="height: 200px;" alt="" src="color/images/monaLisa_original.jpg">
+        <img style="height: 200px;" alt="" src="color/images/monaLisa_orig2.jpg">
+        <img style="height: 200px;" alt="" src="color/images/starryNight.jpg">
+
+
+
+      </div>
+
+      <h5> Histogram Differences </h4>
         <ol>
         <li>In this approach, we first generate a histogram for each of the images in our dataset. We are using 8 bins for each of the RGB channels and allocate each pixel to three bins.</li>
-        <li>Given a query image, we generate a histogram for this image.</li>
-        <li>We compare the two histograms using these 4 methodologies:
+
+        <li>Given a query image, we generate a histogram for this image</li>
+        <li>We compare the two histograms using these 5 methodologies:
           <ol>
             <li>
                 Correlation
@@ -365,6 +349,107 @@
         We can then analyse the different scores of the system for each of the methodologies.
         </li>
         </ol>
+
+      <div style="text-align: center;">
+        Museum
+        <img style="height: 200px;" alt="" src="color/images/channel_images/museum_b.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/museum_g.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/museum_r.png">
+      </div>
+
+      <div style="text-align: center;">
+      Original
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig_b.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig_g.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig_r.png">
+      </div>
+
+      <div style="text-align: center;">
+      Gradient Match
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig2_b.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig2_g.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/orig2_r.png">
+      </div>
+
+      <div style="text-align: center;">
+      Dissimilar
+        <img style="height: 200px;" alt="" src="color/images/channel_images/starry_b.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/starry_g.png">
+        <img style="height: 200px;" alt="" src="color/images/channel_images/starry_r.png">
+      </div>
+
+
+
+      <table style="width:100%">
+        <tr>
+          <th>Image</th>
+          <th>Correlation</th>
+          <th>Chi-Squared</th>
+          <th>Intersection</th>
+          <th>Bhattacharyya</th>
+          <th>Hellinger</th>
+        </tr>
+        <tr>
+          <td>Query</td>
+          <td>1.00</td>
+          <td>0.00</td>
+          <td>4.17</td>
+          <td>1.00</td>
+          <td>1.00</td>
+        </tr>
+        <tr>
+          <td>Original</td>
+          <td>.28</td>
+          <td>-532.78</td>
+          <td>1.50</td>
+          <td>0.36</td>
+          <td>0.36</td>
+        </tr>
+        <tr>
+          <td>Similar Gradients</td>
+          <td>.22</td>
+          <td>-57.97</td>
+          <td>1.02</td>
+          <td>0.28</td>
+          <td>0.28</td>
+        </tr>
+        <tr>
+          <td>Starkly Different</td>
+          <td>.06</td>
+          <td>-80.90</td>
+          <td>0.41</td>
+          <td>0.12</td>
+          <td>0.12</td>
+        </tr>
+      </table>
+
+      <br><br>
+
+      As we can see here, the query performs best with all histogram comparison methods.
+      This makes sense intuitively since the histograms produced should be the same,
+      since the pictures are the same.
+<br><br>
+      Correlation seems to do pretty well since there is
+      a significant difference between the Mona Lisa paintings and the Starry Nights. However,
+      my issue with this method is that .30 correlation is not high enough.
+<br><br>
+      Chi-Squared is producing a result quite on the contrary to what we expect and desire.
+      The most favoriable outcome is actually the painting in a different color context
+      than the original. And the starkly different painting is favored over the original
+      painting present in the museum picture.
+      <br><br>
+      Intersection seems to provide the most meaningful and useful results. It seems as though
+      we can produce scores over 1 when the images are relatively close and below when there
+      is very little in common.
+      <br><br>
+      Bhattacharyya and Hellinger are actually the same formula (as implemented in opencv), and they
+      produce results very similar to those from correlation. Due to the low scores for
+      high matches, we must discard these results as well.
+      <br><br>
+      Intersection seems to produce the highest results. Next parameters that we can tune are the
+      bin size. We also need to run this with a larger data set to determine what a high enough
+      intersection score will determine similarity and what score indicates a clear distinction
+      between two paintings.
 
 
       <br><br>
@@ -394,6 +479,13 @@
       <u>Method 3 - Color</u>
       <br><br>
       Qualitative Results for Color
+      <div style="text-align: center;">
+        <img style="height: 400px;" alt="" src="color/images/Qualitative/Correlation.png">
+        <img style="height: 400px;" alt="" src="color/images/Qualitative/Chi-Squared.png">
+        <img style="height: 400px;" alt="" src="color/images/Qualitative/Hellinger.png">
+        <img style="height: 400px;" alt="" src="color/images/Qualitative/Intersection.png">
+      </div>
+
       <br><br>
 
       <u>Method 4 - Features</u>
@@ -406,18 +498,31 @@
       <!-- Conclusion and Future Work -->
       <h3>Conclusion and Future Work</h3>
 
-      <------------>
-      Conclusion and Future Work
-      <------------>
+      <u>Method 3 - Color</u>
+      <br><br>
+      We have only run one of the three color algorithms that was proposed. We
+      still need to try the k-means clustering algorithm as a way of determining
+      whether 2 paintings map to the same clusters or not. We also still need to
+      implement the method of using neural nets to remember the color compositions
+      of various paintings and their artists.
 
       <br><br>
+      We also need to expand the dataset size from 4 images to the full data set of
+      1000s of images. We need to check whether or not the intersection is optimal in
+      that case as well. Although this will take significant amounts of time to run,
+      the results should reveal the effectiveness of color as a means of
+      classifying paintings. This will also allow our Neural net to be effective.
+      <br><br>
+
+      As far as the parameters are concerned, we still need to figure out what the
+      best bin-size is that optimizes the scores generated.
+      <br><br>
+
 
       <!-- References -->
       <h3>References</h3>
 
-      <------------>
-      References
-      <------------>
+      “How-To: 3 Ways to Compare Histograms Using OpenCV and Python.” PyImageSearch, 2 Aug. 2018, www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
 
       <br><br>
       <!-- Links to Updates -->
