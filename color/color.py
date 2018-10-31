@@ -45,8 +45,18 @@ for imagePath in image_files:
     # the index
     hist = cv2.calcHist([image], [0, 1, 2], None, [8, 8, 8],
         [0, 256, 0, 256, 0, 256])
+
+
+
     hist = cv2.normalize(hist, hist).flatten()
     index[filename] = hist
+
+    print hist.shape
+    print hist
+    # plt.imshow(hist)
+    plt.show()
+
+
 
 # METHOD #1: UTILIZING OPENCV
 # initialize OpenCV methods for histogram comparison

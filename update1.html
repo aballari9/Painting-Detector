@@ -65,10 +65,25 @@
           <a href="https://en.wikipedia.org/wiki/Mona_Lisa">Credits3</a>
       </div>
 
+            <br><br>
+      <!-- Introduction -->
+      <h3>Abstract</h3>
 
-
+      <------------>
+      Abstract goes here
+      <------------>
 
       <br><br>
+
+      <!-- Teasure Figure -->
+      <h3>Teaser Figure</h3>
+
+      <------------>
+      Teaser Figure
+      <------------>
+
+      <br><br>
+
       <!-- Introduction -->
       <h3>Introduction</h3>
 
@@ -196,104 +211,43 @@
 
       <u>Experimental Setup</u>
       <br><br>
-      We will pre-analyze the images in the WikiArt dataset using the approaches described above to get a set of
-      characteristics for each picture. Then for each input image, we will analyze the image using various approaches
-      to find the best match.
+      Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
 
       <br><br>
 
-      <u>Data Sets</u>
+      <h4>Approach 3 - Color</h4>
       <br><br>
 
-      <ul>
-        <li>WikiArt - https://www.wikiart.org/
-          <ul>
-            <li>Paintings are categorized with the following labels:
-              <ul>
-                <li>
-                  Styles
-                </li>
-                <li>
-                  Genres
-                </li>
-                <li>
-                  Media
-                </li>
-              </ul>
-            </li>
-            <li>Some of the approaches will be used to narrow down on one or more of these categories, while others
-              will be used to specifically find a match in the specific category
-            </li>
-            <li>Each painting has an author and a brief description
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <u>Code Structure</u>
-      <br><br>
-      Our objective is to find the best approach for classifying paintings, and thus, we will utilize OpenCV, OpenGL,
-      and Scikit for implementing most of the approaches mentioned. However, since some of the approaches require a
-      more specific analysis technique, such as creating a neural network to analyze color, we will also have to do
-      some implementation.
 
       <br><br>
 
-      <u>Definition of Success</u>
-      <br><br>
-      Success is defined by finding an input’s match using one or more of the approaches mentioned above. In doing so,
-      we hope to find the approach or combination of approaches that correctly finds the corresponding picture for the
-      highest percentage of input images.
+
+
+
+      <!-- Qualitative Results -->
+      <h3>Qualitative Results</h3>
+
+      <------------>
+      Qualitative Results
+      <------------>
 
       <br><br>
 
-      <u>Data Collection Protocol</u>
-      <br><br>
-      As of now, we plan to use the WikiArt database containing famous paintings to check our sample images against.
-      Each painting will be accompanied by the artist’s name and a brief description of the painting. When a match is
-      found, those pieces of information along with a photo of the painting will be returned to the user. This is
-      because our intended purpose for this project is that if someone is at a museum but not close enough to a picture
-      to read about it, they would be able to take a photo of it, specify the corners, and read about it from where
-      they are.
+      <!-- Conclusion and Future Work -->
+      <h3>Conclusion and Future Work</h3>
+
+      <------------>
+      Conclusion and Future Work
+      <------------>
 
       <br><br>
 
-      <u>List of Experiments</u>
-      <ol>
-        <li>The goal of the first experiment would be to figure out a way to combine these various methods (color, texture, edge, features) such that we get a system with the highest accuracy. Our system will be composed of the results of the 4 methods each of which will be weighted a certain amount. To find these weights, the first experiment will execute a gradient descent algorithm with random restarts over a random subset of the dataset. We will repeat this 100 times and average those weights.
-          </li>
-          <li>Another experiment would reveal to us the individual methods that are most successful (in case a combination is not required and is overfitting to the data; Occam and his razor have suggested this). This could be done simply by running each of the methods individually (a 100 times) on a random subset (of size 200) of the images. The best performing algorithm can then be chosen.
-            <ul>
-              <li>For the color method, we shall try each of the three techniques described to determine which is the optimal performer.</li>
-              <li>For the texture method, we shall try 50 different filters on random subsets of the images to determine which ones produce the best results.</li>
-              <li>For the edges method, we shall vary the gaussian sigma and the gaussian box to determine the optimal parameters for our purposes and given our dataset.
-                </li>
-              <li>Once the best combination of approaches is determined, we will test the accuracy of our painting detector by testing the algorithm on 200 randomly picked paintings and getting a percentage for the accuracy in finding a match. The detector will get a point for every painting that was matched correctly to the painting in the database.  </li>
-            </ul>
-          </li>
-      </ol>
+      <!-- References -->
+      <h3>References</h3>
 
-      <u>Expectations and Uncertainty in Results</u>
-
-
-      <br><br>
-      We expect that weighing the texture the highest will yield us with the best results. This is because the texture
-      of an image, from our knowledge of paintings, tells the most about the unique painting’s content. After that, the
-      second-highest weights would belong to using edges. This is because the edges are a unique identifier to any
-      image and will uniquely identify each painting. We are confident that no two paintings have identical sets of
-      edges. After that, we expect the features to be weighted since features would also uniquely identify each of the
-      paintings. Most paintings should be identifiable by unique features which the blob detection should be able to
-      identify. Lastly, color detection will be used to measure the varying presence of different colors. We predict
-      this will have the least weight since many paintings from similar eras have the same colors. This would throw off
-      our color detector and leave us with results that might not be completely accurate. However, it would still be
-      useful in order to break ties when maybe the edges are matching, but simply the colors are different.
-      <br><br>
-
-      To quantify the results of the experiments, we will simply see which combination of the different features
-      provides the best classifier. In other words, accuracy in classification will be our primary metric for
-      determining the result of our experiments. In addition to that, we also plan to use run-time as another metric:
-      if a set of approaches has high accuracy but takes significantly longer to run than other approaches with
-      slightly lower accuracies, time will be taken into consideration.
+      <------------>
+      References
+      <------------>
 
       <br><br>
       <!-- Links to Updates -->
