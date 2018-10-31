@@ -171,18 +171,9 @@
 
       <u>Method 4 - Features</u>
       <br><br>
-      We plan to use feature detection as another part of our approach for scoring paintings to see which one is our
-      target painting. Using this, we can easily track specific patterns and features between our sample photos and the
-      target paintings. Features will be areas with the maximum variation when moved in all the regions around it.
-      Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection
-      is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected
-      by translation, rotation, and illumination, of the images to effectively find matches between images. Blob
-      detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a
-      regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is
-      useful because the “blobs” that are found are fairly consistent across images. When looking to find matches
-      between images, these “blobs” are very similar to corners in that they are not as affected by translation,
-      rotation, and illumination. We will make use of available methods contained in the OpenCV library for this
-      portion of our project.
+      We plan to use feature matching as another part of our approach for scoring paintings to see which one is our
+      target painting. Using this, we can easily track specific keypoints and descriptors between our sample photos and the
+      target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Using OpenCV's feature matching, we used a Fast Library for Approximate Nearest Neighbors (FLANN) based matcher to analyze the descriptors from the 2 images and match them up. Next, we filtered the matches so to eliminate outliers. Using the remaining matches, we could identify the features that matched between the two images.
 
       <br><br>
       <div style="text-align: center;">
