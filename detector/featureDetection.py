@@ -4,17 +4,17 @@ from matplotlib import pyplot as plt
 
 scores = []
 for i in range(0,5):
-	img1 = cv.imread('monalisa.jpg',0)          # queryImage
+	img1 = cv.imread('../monaLisa.jpg',0)          # queryImage
 	if i == 0:
-		img2 = cv.imread('monalisapic.jpg',0) # trainImage
+		img2 = cv.imread('../monaLisaPhoto.jpg',0) # trainImage
 	elif i ==1:
-		img2 = cv.imread('americangothic.jpg',0) # trainImage
+		img2 = cv.imread('../images/americangothic.jpg',0) # trainImage
 	elif i==2:
-		img2 = cv.imread('frida.jpg',0) # trainImage
+		img2 = cv.imread('../images/frida.jpg',0) # trainImage
 	elif i== 3:
-		img2 = cv.imread('vangough.jpg',0) # trainImage
+		img2 = cv.imread('../images/vangough.jpg',0) # trainImage
 	else:
-		img2 = cv.imread('random.jpg',0) # trainImage
+		img2 = cv.imread('../images/random.jpg',0) # trainImage
 
 	# Initiate SIFT detector
 	sift = cv.xfeatures2d.SIFT_create()
