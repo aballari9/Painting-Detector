@@ -263,6 +263,37 @@
       <u>Method 3 - Color</u>
       <br><br>
       Experiments and Results for Color
+      
+             <h4>Approach 3 - Color</h4>
+      <h5> 1. Histogram Differences </h4>
+        <ol>
+        <li>In this approach, we first generate a histogram for each of the images in our dataset. We are using 8 bins for each of the RGB channels and allocate each pixel to three bins.</li>
+        <li>Given a query image, we generate a histogram for this image.</li>
+        <li>We compare the two histograms using these 4 methodologies:
+          <ol>
+            <li>
+                Correlation
+            </li>
+            <li>
+                Chi-Squared Distance
+            </li>
+            <li>
+              Intersection
+            </li>
+            <li>
+                Bhattacharyya Distance
+            </li>
+            <li>
+                Hellinger Distance
+            </li>
+          </ol>
+        </li>
+        <li>
+        We can then analyse the different scores of the system for each of the methodologies.
+        </li>
+        </ol>
+      
+      
       <br><br>
 
       <u>Method 4 - Features</u>
