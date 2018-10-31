@@ -1,0 +1,46 @@
+import numpy as np
+import cv2 as cv
+from matplotlib import pyplot as plt
+
+scores = []
+for i in range(0,5):
+	img1 = cv.imread('monalisa.jpg',0)          # queryImage
+	if i == 0:
+		img2 = cv.imread('monalisapic.jpg',0) # trainImage
+	elif i ==1:
+		img2 = cv.imread('americangothic.jpg',0) # trainImage
+	elif i==2:
+		img2 = cv.imread('frida.jpg',0) # trainImage
+	elif i== 3:
+		img2 = cv.imread('vangough.jpg',0) # trainImage
+	else:
+		img2 = cv.imread('random.jpg',0) # trainImage
+
+	# Initiate SIFT detector
+	sift = cv.xfeatures2d.SIFT_create()
+	# find the keypoints and descriptors with SIFT
+	kp1, des1 = sift.detectAndCompute(img1,None)
+	kp2, des2 = sift.detectAndCompute(img2,None)
+	# FLANN parameters
+	FLANN_INDEX_KDTREE = 1
+	index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+	search_params = dict(checks=50)   # or pass empty dictionary
+	flann = cv.FlannBasedMatcher(index_params,search_params)
+	matches = flann.knnMatch(des1,des2,k=2)
+	# Need to draw only good matches, so create a mask
+	matchesMask = [[0,0] for i in xrange(len(matches))]
+	# ratio test as per Lowe's paper
+	countGood = 0
+	for i,(m,n) in enumerate(matches):
+	    if m.distance < 0.7*n.distance:
+	    	countGood += 1
+	        matchesMask[i]=[1,0]
+
+	draw_params = dict(matchColor = (0,255,0),
+	                   singlePointColor = (255,0,0),
+	                   matchesMask = matchesMask,
+	                   flags = 0)
+	scores.append(countGood)
+	img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
+	plt.imshow(img3,),plt.show()
+print(scores)
