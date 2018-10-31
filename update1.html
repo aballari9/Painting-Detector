@@ -47,25 +47,9 @@
       <span style="font-size: 18px; line-height: 1.5em;">Fall 2018 CS 4476 Computer Vision: Painting Detector</span><br>
       <span style="font-size: 18px; line-height: 1.5em;">Georgia Tech</span>
       <hr>
-
-      <!-- Main Illustrative Figure -->
-      <div style="text-align: center;">
-        <img style="height: 200px;" alt="" src="sketchMona.png">
-        or
-        <img style="height: 200px;" alt="" src="monaLisaPhoto.jpg">
-        ==>
-        <img style="height: 200px;" alt="" src="monaLisa.jpg">
-        Mona Lisa by Leonardo da Vinci (1503)
+      <br><br>
 
 
-      </div>
-      <div style="text-align: center;">
-          <a href="https://www.drawingtutorials101.com/how-to-draw-mona-lisa">Credits1</a>
-          <a href="https://www.youtube.com/watch?v=H5-vXW7c6MI">Credits2</a>
-          <a href="https://en.wikipedia.org/wiki/Mona_Lisa">Credits3</a>
-      </div>
-
-            <br><br>
       <!-- Introduction -->
       <h3>Abstract</h3>
 
@@ -75,6 +59,7 @@
 
       <br><br>
 
+
       <!-- Teasure Figure -->
       <h3>Teaser Figure</h3>
 
@@ -83,6 +68,7 @@
       <------------>
 
       <br><br>
+
 
       <!-- Introduction -->
       <h3>Introduction</h3>
@@ -101,6 +87,8 @@
       approaches, focusing on efficiency and accuracy.
 
       <br><br>
+
+
       <!-- Approach -->
       <h3>Approach</h3>
       We have identified several approaches we will use to detect paintings—texture
@@ -108,9 +96,11 @@
       tune each of these different approaches to the images. Then, we shall use a
       combination of these approaches to find an efficient algorithm that labels as
       many paintings correctly as possible.
+
       <br><br>
 
       <u>Method 1 - Texture</u>
+
       <br><br>
       Texture analysis will improve the overall result of our system since different
       paintings may have similar colors and features, but may be of two different
@@ -132,6 +122,7 @@
       we desire due to the difficulty in capturing the texture of a painting through
       a picture of it: several factors, such as lighting, may obscure the textures.
       However, it could be used in narrowing down on possible matches.
+
       <br><br>
       <div style="text-align: center;">
         <img style="height: 200px;" alt="" src="texture.jpg">
@@ -141,6 +132,7 @@
       <br><br>
 
       <u>Method 2 - Edges</u>
+
       <br><br>
       Edge detection will aid in narrowing down on the painting style or time period that the painting originated from.
       Paintings from different time periods vary in edge style. While modernist paintings incorporate more structured
@@ -164,6 +156,7 @@
       <br><br>
 
       <u>Method 3 - Color</u>
+
       <br><br>
       Another approach that we will be looking at is analyzing the colors in the image to classify the paintings. A
       basic approach might entail simply summing up the pixel values for each of the R, G, and B channels and looking
@@ -185,6 +178,7 @@
       <br><br>
 
       <u>Method 4 - Features</u>
+
       <br><br>
       We plan to use feature detection as another part of our approach for scoring paintings to see which one is our
       target painting. Using this, we can easily track specific patterns and features between our sample photos and the
@@ -207,17 +201,8 @@
       <br><br>
 
 
-      <h3>Experiments and results</h3>
-
-      <u>Experimental Setup</u>
-      <br><br>
-      Discuss this for each approach: </br>
-      Provide details about the experimental set up (number of images/videos, number of datasets you experimented with, train/test split if you used machine learning algorithms, etc.). Describe the evaluation metrics you used to evaluate how well your approach is working. Include clear figures and tables, as well as illustrative qualitative examples if appropriate. Be sure to include obvious baselines to see if your approach is doing better than a naive approach (e.g. for classification accuracy, how well would a classifier do that made random decisions?). Also discuss any parameters of your algorithms, and tell us how you set the values of those parameters. You can also show us how the performance varies as you change those parameter values. Be sure to discuss any trends you see in your results, and explain why these trends make sense. Are the results as expected? Why?
-      <br><br>
-
       <!-- Experiments and Results -->
-
-
+      <h3>Experiments and results</h3>
 
       <u>Method 1 - Texture</u>
       <br><br>
@@ -226,21 +211,10 @@
 
       <u>Experiments and Results for Edge Analysis</u>
       <br><br>
-      In order to test the accurancy of finding matches to an input image of a painting based
-      on the edge structure of the image, we used a small sample of the images
-      in the Wiki database. The sample of 9 images belong to different art styles, so
-      they vary in edge quantity and structure. Some of the images in the sample set have
-      very faint and soft edges, which others have more rigid and prominent egdes. <br><br>
+      In order to test the accurancy of finding matches to an input image of a painting based on the edge structure of the image, we used a small sample of the images in the Wiki database. The sample of 9 images belong to different art styles, so they vary in edge quantity and structure. Some of the images in the sample set have very faint and soft edges, while others have more rigid and prominent egdes. <br><br>
 
-      We proprocessed each image in the sample set by running the Canny Edge Detector on it
-      with the most appropriate sigma for the Guassian Filter, and plotting an histogram of the values
-      returned by the edge detector. Since skimage's canny edge detector uses white pixels
-      to denote an edge on a black background, the histogram produced will only require 2 bins.
-      The ratio of the number of white pixel to the the number of pixels in the entire gray image
-      would provide a good guage on the promience of edges in each image. So, we determined and stored
-      the white pixel ratio for each image. The image below shows the histogram for the given image. As we can see
-      the image doesn't have too many promienent edges, so the first bin with a pixel value of 0
-      has a higher frequency, than the second bin with a pixel value of 1. <br><br>
+      We proprocessed each image in the sample set by running the Canny Edge Detector on it with the most appropriate sigma for the Guassian Filter, and plotting an histogram of the values returned by the edge detector. Since skimage's canny edge detector uses white pixels to denote an edge on a black background, the histogram produced will only require 2 bins.
+      The ratio of the number of white pixel to the the number of pixels in the entire gray image would provide a good guage on the promience of edges in each image. So, we determined and stored the white pixel ratio for each image. The image below shows the histogram for the given image. As we can see the tomb image doesn't have too many promienent edges, so the first bin with a pixel value of 0 (black pixels) has a higher frequency, than the second bin with a pixel value of 1 (white pixels). <br><br>
 
       <br><br>
       <div style="text-align: center;">
@@ -248,80 +222,40 @@
       </div>
       <br><br>
 
-      For any input image and a specified sigma, for which we want to find a match for, we processed the
-      image in the same way. We ran skimage's canny edge detecor on the input image, and
-      determined the white pixel ratio but plotting a histogram of the returned edges array. The sigma
-      for an input image is a free parameter that determines the accuracy of the results. We
-      determined the matches to the input image by finding all the images in the sample
-      set that have a white pixel ratio that has a percent difference respective to the input image's white pixel ratio that is less than the specified
-      threshold. For the experiment, this threshold was set to 10%. <br><br>
+      For any input image and a specified sigma, for which we want to find a match, we processed the image in the same way. We ran skimage's canny edge detecor on the input image, and determined the white pixel ratio by plotting a histogram of the returned edges array. The sigma for an input image is a free parameter that determines the accuracy of the results. We
+      determined the matches to the input image by finding all the images in the sample set that have a white pixel ratio that has a percent difference respective to the input image's white pixel ratio that is less than the specified threshold. For the experiment, this threshold was set to 10%. (Percent difference of the ratio of each image in the same and the ratio of the imput imgae should be less than 10% for the individual image to be considered a match.)<br><br>
 
-      This approach seems to work really well in distinguishing images with softer and less
-      prominent edges from images with bolder edges. With an appropriate sigma, we were able
-      to narrow down the set to the input image if the input image contained soft edges. The
-      image below was the result of finding a match of the 'tomb' image with a sigma of 1.7. (The
-      original image was preprocessed with a sigma of 1.8).
+      This approach seems to work really well in distinguishing images with softer and less prominent edges from images with bolder edges. With an appropriate sigma, we were able to narrow down the set to the input image if the input image contained soft edges. The image on the left is the result of finding a match of the 'tomb' image with a sigma of 1.7. (The original image was preprocessed with a sigma of 1.8). As we can see from the image on the right, this approach also works really well with the 'john-ferren' image with a sigma of 0.55. (The original image was preprocessed with a sigma of 0.5).
 
-      <br><br>
       <div style="text-align: center;">
         <img style="height: 400px;" alt="" src="images/results/tombResults.jpg">
-      </div>
-      <br><br>
-
-      As we can see from the image below, this approach also works really well with the 'john-ferren' image with a
-      sigma of 0.55. (The original image was preprocessed with a sigma of 0.5).
-
-      <br><br>
-      <div style="text-align: center;">
         <img style="height: 400px;" alt="" src="images/results/john-ferrenResults.jpg">
       </div>
-      <br><br>
-
-      The value of these sigmas for the softer edges image really affect the results
-      of the detector based on edges since blurring the image too much or too less could
-      could either take out too much of the important edges or introduce too much noise.
-      Fo example, running the detector on the 'tomb' image with a sigma of 1.5 does not produce any
-      matches at all. Using only edges as the macthing factor in the detector does
-      not work as well in distinguishing amongst images with very promienent and rigid edegs.
-      As we can see from the images below, while we were able to get the right image back
-      within the matches, we also get matches from other non-related images. The first image on the left
-      shows the results for running the detector on the 'abstract' image with a sigma of 1.5
-      (preprocessed with a sigma of 2), and the second image on the right shows the
-      results for running the detector on the 'synchromy-in-orange' image with a sigma of 1.2
-      (preprocessed with a sigma of 1.3).
 
       <br><br>
+      The value of these sigmas for the softer edges images drastically affected the results of the detector based on edges since blurring the image too much or too less could either take out too much of the important edges or introduce too much noise. For example, running the detector on the 'tomb' image with a sigma of 1.5 does not produce any matches at all. Using only edges as the macthing factor in the detector does not work as well in distinguishing amongst images with very promienent and rigid edegs. As we can see from the images below, while we were able to get the right image back within the matches, we also get matches with other non-related images. The first image on the left shows the results for running the detector on the 'abstract' image with a sigma of 1.5 (preprocessed with a sigma of 2), and the second image on the right shows the results for running the detector on the 'synchromy-in-orange' image with a sigma of 1.2 (preprocessed with a sigma of 1.3).
 
+      <br><br>
       <div style="text-align: center;">
         <img style="height: 400px;" alt="" src="images/results/abstractResults.jpg">
         <img style="height: 400px;" alt="" src="images/results/synchromy-in-orangeResults.jpg">
       </div>
 
-      The value of the sigma is not as significant for these images, since the images
-      would already have a lot of noise. Perhaps lowering the threshold, so that
-      the percent difference is tightented, would increase the accuracy.
-
+      The value of the sigma is not as significant for these images, since the images would already have a lot of noise. Perhaps lowering the threshold, so that the percent difference is tightented, would increase the accuracy.
       <br><br>
 
       <u>Method 3 - Color</u>
-
-      <h4>Approach 3 - Color</h4>
-      <h5> Dataset </h4>
-      For the midterm update, the color has only been updated on a smaller subset of the full dataset.
-      We are testing it with these 4 images for now to analyze the results closely before we move to
-      the full dataset. The first image serves as the query.
+      <h5> Dataset </h5>
+      For the midterm update, the color has only been updated on a smaller subset of the full dataset. We are testing it with these 4 images for now to analyze the results closely before we move to the full dataset. The first image serves as the query.
 
       <div style="text-align: center;">
         <img style="height: 200px;" alt="" src="color/images/monaLisa_museum.jpg">
         <img style="height: 200px;" alt="" src="color/images/monaLisa_original.jpg">
         <img style="height: 200px;" alt="" src="color/images/monaLisa_orig2.jpg">
         <img style="height: 200px;" alt="" src="color/images/starryNight.jpg">
-
-
-
       </div>
 
-      <h5> Histogram Differences </h4>
+      <h5> Histogram Differences </h5>
         <ol>
         <li>In this approach, we first generate a histogram for each of the images in our dataset. We are using 8 bins for each of the RGB channels and allocate each pixel to three bins.</li>
 
@@ -425,32 +359,25 @@
 
       <br><br>
 
-      As we can see here, the query performs best with all histogram comparison methods.
-      This makes sense intuitively since the histograms produced should be the same,
-      since the pictures are the same.
-<br><br>
-      Correlation seems to do pretty well since there is
-      a significant difference between the Mona Lisa paintings and the Starry Nights. However,
-      my issue with this method is that .30 correlation is not high enough.
-<br><br>
-      Chi-Squared is producing a result quite on the contrary to what we expect and desire.
-      The most favoriable outcome is actually the painting in a different color context
-      than the original. And the starkly different painting is favored over the original
-      painting present in the museum picture.
-      <br><br>
-      Intersection seems to provide the most meaningful and useful results. It seems as though
-      we can produce scores over 1 when the images are relatively close and below when there
-      is very little in common.
-      <br><br>
-      Bhattacharyya and Hellinger are actually the same formula (as implemented in opencv), and they
-      produce results very similar to those from correlation. Due to the low scores for
-      high matches, we must discard these results as well.
-      <br><br>
-      Intersection seems to produce the highest results. Next parameters that we can tune are the
-      bin size. We also need to run this with a larger data set to determine what a high enough
-      intersection score will determine similarity and what score indicates a clear distinction
-      between two paintings.
+      As we can see here, the query performs best with all histogram comparison methods. This makes sense intuitively since the histograms produced should be the same, since the pictures are the same.<br><br>
 
+      Correlation seems to do pretty well since there is a significant difference between the Mona Lisa paintings and the Starry Nights. However, my issue with this method is that .30 correlation is not high enough.<br><br>
+
+      Chi-Squared is producing a result quite on the contrary to what we expect and desire. The most favoriable outcome is actually the painting in a different color context than the original. And the starkly different painting is favored over the original painting present in the museum picture. <br><br>
+
+      Intersection seems to provide the most meaningful and useful results. It seems as though we can produce scores over 1 when the images are relatively close and below when there is very little in common. <br><br>
+
+      Bhattacharyya and Hellinger are actually the same formula (as implemented in opencv), and they produce results very similar to those from correlation. Due to the low scores for high matches, we must discard these results as well. <br><br>
+
+      Intersection seems to produce the highest results. Next parameters that we can tune are the bin size. We also need to run this with a larger data set to determine what a high enough intersection score will determine similarity and what score indicates a clear distinction between two paintings.<br><br>
+
+      <h5>Qualitative Results for Color</h5>
+      <div style="text-align: center;">
+        <img style="height: 350px;" alt="" src="color/images/Qualitative/Correlation.png">
+        <img style="height: 350px;" alt="" src="color/images/Qualitative/Chi-Squared.png">
+        <img style="height: 300px;" alt="" src="color/images/Qualitative/Hellinger.png">
+        <img style="height: 350px;" alt="" src="color/images/Qualitative/Intersection.png">
+      </div>
 
       <br><br>
 
@@ -460,76 +387,20 @@
       <br><br>
 
 
-
-
-      <!-- Qualitative Results -->
-      <h3>Qualitative Results</h3>
-      <br><br>
-
-      <u>Method 1 - Texture</u>
-      <br><br>
-      Qualitative Results for Texture
-      <br><br>
-
-      <u>Method 2 - Edges</u>
-      <br><br>
-      Qualitative Results for Edges
-      <br><br>
-
-      <u>Method 3 - Color</u>
-      <br><br>
-      Qualitative Results for Color
-      <div style="text-align: center;">
-        <img style="height: 400px;" alt="" src="color/images/Qualitative/Correlation.png">
-        <img style="height: 400px;" alt="" src="color/images/Qualitative/Chi-Squared.png">
-        <img style="height: 400px;" alt="" src="color/images/Qualitative/Hellinger.png">
-        <img style="height: 400px;" alt="" src="color/images/Qualitative/Intersection.png">
-      </div>
-
-      <br><br>
-
-      <u>Method 4 - Features</u>
-      <br><br>
-      Qualitative Results for Features
-      <br><br>
-
-
-
       <!-- Conclusion and Future Work -->
       <h3>Conclusion and Future Work</h3>
-      <u>Method 2 - Edges</u>
-      <br><br>
-      Finding matches utilizing edges does help narrow down on a set of images. This approach
-      works the best when distinguishing images with soft edges with images with hard edges.
-      However, it cannot be solely used for distinguish amongst images with similar hard edges.
-      The free parameter sigma is used to control how much to blur an input image and significantly
-      affects the the accuracy at which the images with soft edges are detected. Since this is an easier
-      parameter to control than threshold values for maximum supression, we decided to use skimage's Canny Edge detector
-      over OpenCV's Canny edge detector. This approach finds processed the small sample set and found matches relatively fast.
-      We will have to test the performance of this approach on a significantly larger data set of images with a
-      greater variety of edges. We will also explore if we can get more information other than the white pixel to total pixel
-      ratio from the canny edge detector. Finding matches though edge analysis is definitely impact full and will
-      be a significant componenent of the final painting detector.
-      <br><br>
 
-      <u>Method 3 - Color</u>
+      <br><br>
+      Finding matches utilizing edges does help narrow down on a set of images. This approach works the best when distinguishing images with soft edges with images with hard edges. However, it cannot be solely used for distinguish amongst images with similar hard edges. The free parameter sigma is used to control how much to blur an input image and significantly
+      affects the the accuracy at which the images with soft edges are detected. Since this is an easier parameter to control than the threshold values for maximum supression, we decided to use skimage's canny edge detector instead of OpenCV's canny edge detector. This approach processed the small sample set and found matches relatively fast. We will have to test the performance of this approach on a significantly larger data set of images with a greater variety of edges. We will also explore if we can get more information other than the white pixel to total pixel ratio from the canny edge detector. Finding matches though edge analysis is definitely impactfull and will be a significant componenent of the final painting detector.
+
       <br><br>
       We have only run one of the three color algorithms that was proposed. We
       still need to try the k-means clustering algorithm as a way of determining
       whether 2 paintings map to the same clusters or not. We also still need to
-      implement the method of using neural nets to remember the color compositions
-      of various paintings and their artists.
-
-      <br><br>
-      We also need to expand the dataset size from 4 images to the full data set of
-      1000s of images. We need to check whether or not the intersection is optimal in
-      that case as well. Although this will take significant amounts of time to run,
-      the results should reveal the effectiveness of color as a means of
-      classifying paintings. This will also allow our Neural net to be effective.
-      <br><br>
-
-      As far as the parameters are concerned, we still need to figure out what the
-      best bin-size is that optimizes the scores generated.
+      implement the method of using neural nets to remember the color compositions of various paintings and their artists. We also need to expand the dataset size from 4 images to the full data set of 1000s of images. We need to check whether or not the intersection is optimal in
+      that case as well. Although this will take significant amounts of time to run, the results should reveal the effectiveness of color as a means of
+      classifying paintings. This will also allow our Neural net to be effective. As far as the parameters are concerned, we still need to figure out what the best bin-size is that optimizes the scores generated.
       <br><br>
 
 
