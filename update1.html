@@ -102,28 +102,13 @@
       <u>Method 1 - Texture</u>
 
       <br><br>
-      Texture analysis will improve the overall result of our system since different
-      paintings may have similar colors and features, but may be of two different
-      mediums. For example, oils paints are thicker than watercolor paints. Even though
-      an oil painting of a city landscape contains the same features and colors as a
-      watercolor painting of the same city landscape, the texture of the oil painting
-      may be more rugged than the watercolor paintings. <br><br>
-      We plan on running a set of diverse filters on every pixel of each image in our
-      database, then concatenating the filtered values together to form an
-      M x N x k matrix, where k is the number of filters and M, N are the dimensions
-      of the image. We will have one M x N x k matrix for every image in our dataset.
-      When an image is inputted into our system, we will apply each filter in our
-      filter bank to produce an M x N x k matrix for the input. We will then compute
-      the sum of the squared distances to find the painting in our dataset with the
-      smallest euclidean distance to our input, which will be the most
-      similar-painting. Rather than implementing this process ourselves, we plan to
-      use OpenCV and OpenGL. <br><br>
-      The authors believe that this approach individually may not give us the result
-      we desire due to the difficulty in capturing the texture of a painting through
-      a picture of it: several factors, such as lighting, may obscure the textures.
-      However, it could be used in narrowing down on possible matches.
+      We believe texture analysis will improve the overall result of our system since different paintings may have similar colors and features but may be of two different mediums. For example, oils paints are thicker than watercolor paints. Even though an oil painting of a city landscape contains the same features and colors as a watercolor painting of the same city landscape, the texture of the oil painting may be more rugged than the watercolor paintings. <br><br>
 
+      We will use local binary patterns texture matching, a well-studied technique that is invariant to illumination as well as translation, the two primary ways our inputs will differ from our outputs. LBP matching works by forming an LBP descriptor, which is calculated by choosing n points on a circle of specified radius around a reference pixel and creating an n-bit number, where the ith bit is set to 1 if the ith value is greater than the reference pixel value, and 0 otherwise. This process is repeated for every pixel in the gray-scaled image, and thus the LBP descriptor is the same size as the original image. After the LBP descriptor has been created, a normalized histogram of the values is created. This process is repeated for every image in the training set. <br><br>
+
+      In order to classify an image, the same process is repeated to create a normalized histogram of the LBP values. Then, a distance metric, such as chi-squared, is used to compare the test image histogram with the training data histograms. The most similar image—or the image with the lowest chi-squared error—is returned.
       <br><br>
+
       <div style="text-align: center;">
         <img style="height: 200px;" alt="" src="texture.jpg">
         <a href="http://art-now-and-then.blogspot.com/2014/03/choosing-painting-medium.html">Image Credits</a>
@@ -180,18 +165,9 @@
       <u>Method 4 - Features</u>
 
       <br><br>
-      We plan to use feature detection as another part of our approach for scoring paintings to see which one is our
-      target painting. Using this, we can easily track specific patterns and features between our sample photos and the
-      target paintings. Features will be areas with the maximum variation when moved in all the regions around it.
-      Feature detection can be done using either the Harris corner detection or blob detection. Harris corner detection
-      is a very simple yet efficient algorithm which finds the corners, which are the parts of an image least affected
-      by translation, rotation, and illumination, of the images to effectively find matches between images. Blob
-      detection follows the same concept of Harris corner detection, but instead of looking for corner it looks for a
-      regions in a image that differ in properties relative to the regions’ surroundings, “blobs”. Blob detection is
-      useful because the “blobs” that are found are fairly consistent across images. When looking to find matches
-      between images, these “blobs” are very similar to corners in that they are not as affected by translation,
-      rotation, and illumination. We will make use of available methods contained in the OpenCV library for this
-      portion of our project.
+      We plan to use feature matching as another part of our approach for scoring paintings to see which one is our
+      target painting. Using this, we can easily track specific keypoints and descriptors between our sample photos and the
+      target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Using OpenCV's feature matching, we used a Fast Library for Approximate Nearest Neighbors (FLANN) based matcher to analyze the descriptors from the 2 images and match them up. Next, we filtered the matches so to eliminate outliers. Using the remaining matches, we could identify the features that matched between the two images.
 
       <br><br>
       <div style="text-align: center;">
@@ -206,10 +182,40 @@
 
       <u>Method 1 - Texture</u>
       <br><br>
-      Experiments and Results for Texture
+      The implementation for this experiment was based on <a href="http://hanzratech.in/2015/05/30/local-binary-patterns.html">Bikramjot Hanzra’s Texture Matching using Local Binary Patterns</a> tutorial. The implementation uses several packages, including OpenCV and the local_binary_pattern algorithm in the skimage.feature package. The training dataset used was a collection of four famous paintings, all of which seem to have different textures. Two copies of each image were used in the training dataset in order to test this method’s sensitivity to angle, color intensity, and image size. As a pre-processing step, the images were rescaled to have the same number of pixels and dimensions. <br><br>
+
+      The only user-defined parameter in the LBP algorithm is the radius of the circular patch. Since the purpose of this approach is to detect the fine-grained differences such as the medium of the painting—as opposed to coarser details like how thick lines tend to be in the painting—we iterated over several small values for radius ranging from 3 to 20 pixels. However, no radius value (including much larger ones) seemed to improve or drastically change the results of this technique. <br><br>
+
+      As described in the approach section, in order to classify an input, we calculate its LBP descriptor and then use a distance metric—in this case, chi-squared—to compare the LBP descriptor against the training set. Our experiment returned the chi-squared error as well as the corresponding image. Below are examples of the results. <br><br>
+
+      <div style="text-align: center;">
+        <u>Query Image (left), Results w/chi-squared error (right). LBP radius = 15. </u>
+        <br>
+        <img style="height: 400px;" alt="" src="texture/results/dali_query15.png">
+        <img style="height: 400px;" alt="" src="texture/results/dali_results15.png">
+      </div>
+
+      <br><br>
+      <div style="text-align: center;">
+        <u>Query Image (left), Results w/chi-squared error (right). LBP radius = 3. </u>
+        <br>
+        <img style="height: 400px;" alt="" src="texture/results/gogh_query3.png">
+        <img style="height: 400px;" alt="" src="texture/results/gogh_results3.png">
+      </div>
+
+      The subsample of results above clearly show that this method did not work very well, regardless of the query image and the radius used. We believe that the algorithm is doing no better than guessing. For example, in the trial below with radius = 3, we see that one version of The Scream has a chi-squared error of 0.064 while the other has an error of 0.515 from our query image.
+
+      <br><br>
+      <div style="text-align: center;">
+        <u>Query Image (left), Results w/chi-squared error (right). LBP radius = 3. </u>
+        <br>
+        <img style="height: 400px;" alt="" src="texture/results/scream_query3.png">
+        <img style="height: 400px;" alt="" src="texture/results/scream_results3.png">
+      </div>
+
       <br><br>
 
-      <u>Experiments and Results for Edge Analysis</u>
+      <u>Method 2 - Edges</u>
       <br><br>
       In order to test the accurancy of finding matches to an input image of a painting based on the edge structure of the image, we used a small sample of the images in the Wiki database. The sample of 9 images belong to different art styles, so they vary in edge quantity and structure. Some of the images in the sample set have very faint and soft edges, while others have more rigid and prominent egdes. <br><br>
 
@@ -361,34 +367,62 @@
 
       As we can see here, the query performs best with all histogram comparison methods. This makes sense intuitively since the histograms produced should be the same, since the pictures are the same.<br><br>
 
-      Correlation seems to do pretty well since there is a significant difference between the Mona Lisa paintings and the Starry Nights. However, my issue with this method is that .30 correlation is not high enough.<br><br>
+        Correlation seems to do pretty well since there is a significant difference between the Mona Lisa paintings and the Starry Nights. However, my issue with this method is that .30 correlation is not high enough.<br><br>
 
-      Chi-Squared is producing a result quite on the contrary to what we expect and desire. The most favoriable outcome is actually the painting in a different color context than the original. And the starkly different painting is favored over the original painting present in the museum picture. <br><br>
+        Chi-Squared is producing a result quite on the contrary to what we expect and desire. The most favoriable outcome is actually the painting in a different color context than the original. And the starkly different painting is favored over the original painting present in the museum picture. <br><br>
 
-      Intersection seems to provide the most meaningful and useful results. It seems as though we can produce scores over 1 when the images are relatively close and below when there is very little in common. <br><br>
+        Intersection seems to provide the most meaningful and useful results. It seems as though we can produce scores over 1 when the images are relatively close and below when there is very little in common. <br><br>
 
-      Bhattacharyya and Hellinger are actually the same formula (as implemented in opencv), and they produce results very similar to those from correlation. Due to the low scores for high matches, we must discard these results as well. <br><br>
+        Bhattacharyya and Hellinger are actually the same formula (as implemented in opencv), and they produce results very similar to those from correlation. Due to the low scores for high matches, we must discard these results as well. <br><br>
 
-      Intersection seems to produce the highest results. Next parameters that we can tune are the bin size. We also need to run this with a larger data set to determine what a high enough intersection score will determine similarity and what score indicates a clear distinction between two paintings.<br><br>
+        <h5>Qualitative Results for Color</h5>
+        <div style="text-align: center;">
+          <img style="height: 350px;" alt="" src="color/images/Qualitative/Correlation.png">
+          <img style="height: 350px;" alt="" src="color/images/Qualitative/Chi-Squared.png">
+          <img style="height: 300px;" alt="" src="color/images/Qualitative/Hellinger.png">
+          <img style="height: 350px;" alt="" src="color/images/Qualitative/Intersection.png">
+        </div>
 
-      <h5>Qualitative Results for Color</h5>
-      <div style="text-align: center;">
-        <img style="height: 350px;" alt="" src="color/images/Qualitative/Correlation.png">
-        <img style="height: 350px;" alt="" src="color/images/Qualitative/Chi-Squared.png">
-        <img style="height: 300px;" alt="" src="color/images/Qualitative/Hellinger.png">
-        <img style="height: 350px;" alt="" src="color/images/Qualitative/Intersection.png">
-      </div>
-
-      <br><br>
+        <br><br>
 
       <u>Method 4 - Features</u>
       <br><br>
-      Experiments and Results for Features
+      For the feature matching imeplementation, we used OpenCV's feature matching tools. First, we used SIFT to detect all the keypoints and their descriptors, and then used k-nearest neighbors to pair features from the photo of the painting to features of the set of available paintings that it could be. For this update, we used a subset of 5 paintings. Below are the results for identifying both the Mona Lisa and the Van Gough Self Portrait from 1889.
       <br><br>
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching1.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching2.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching3.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching4.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/monaMatching5.png">
+      </div>
+      <br><br>
+      <center><i>Matching the Mona Lisa against 5 images.<i><center>
+      <br><br>
+
+      <div style="text-align: center;">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching1.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching2.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching3.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching4.png">
+        <img style="height: 200px;" alt="" src="featureMatchingResults/vgMatching5.png">
+      </div>
+      <br><br>
+      <center><i>Matching Van Gough Self Portrait 1889 against 5 images.<i><center>
+      <br><br>
+      As we can see from the results above, there are many more matches found between the photo of the Mona Lisa and the actual painting itself. The actual numbers show that there are 34 matches with the Mona Lisa, and only 4, 2, 1, and 2 for the following 4 images respectively.
+
+      <br><br>
+
+      Intersection seems to produce the highest results. Next parameters that we can tune are the bin size. We also need to run this with a larger data set to determine what a high enough intersection score will determine similarity and what score indicates a clear distinction between two paintings.<br><br>
 
 
       <!-- Conclusion and Future Work -->
       <h3>Conclusion and Future Work</h3>
+
+      <br><br>
+      Ultimately, this method was not able to yield consistent or impressive results. This makes sense given the very nature of paintings: most don’t have any sort of fine-grained, repeatable pattern in them, which is what texture detection depends on finding. Due to these results, we have decided that a texture-based classification approach is not feasible for this classification problem and is thus no longer being considered.
+      <br><br>
 
       <br><br>
       Finding matches utilizing edges does help narrow down on a set of images. This approach works the best when distinguishing images with soft edges with images with hard edges. However, it cannot be solely used for distinguish amongst images with similar hard edges. The free parameter sigma is used to control how much to blur an input image and significantly
@@ -401,13 +435,20 @@
       implement the method of using neural nets to remember the color compositions of various paintings and their artists. We also need to expand the dataset size from 4 images to the full data set of 1000s of images. We need to check whether or not the intersection is optimal in
       that case as well. Although this will take significant amounts of time to run, the results should reveal the effectiveness of color as a means of
       classifying paintings. This will also allow our Neural net to be effective. As far as the parameters are concerned, we still need to figure out what the best bin-size is that optimizes the scores generated.
-      <br><br>
 
+      <br><br>
+      From feature matching, we can conclude that it is in itself a valuable tool for matching the photos to paintings. In both experiments, the correct painting had a significantly larger number of matches than the other paintings. We beleive, as of now, that feature matching will be very valuable in the remainder of this project.
+
+      <br><br>
 
       <!-- References -->
       <h3>References</h3>
 
       “How-To: 3 Ways to Compare Histograms Using OpenCV and Python.” PyImageSearch, 2 Aug. 2018, www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
+
+      <br><br>
+      Texture Matching Using Local Binary Patterns (lbp), Opencv, Scikit-learn and Python
+      http://hanzratech.in/2015/05/30/local-binary-patterns.html
 
       <br><br>
       <!-- Links to Updates -->
