@@ -14,8 +14,23 @@ from skimage.color import rgb2gray
 # three-rocks - https://www.wikiart.org/en/john-ferren/three-rocks-1949
 # john-ferren - https://www.wikiart.org/en/john-ferren/untitled-1952-1
 
-inputImage = 'synchromy-in-orange'
-inputSigma = 1.2
+# Good Results:
+# inputImage = 'john-ferren'
+# inputSigma = 0.55
+#
+# inputImage = 'tomb'
+# inputSigma = 1.7
+#
+#
+# Not so great Results:
+# inputImage = 'abstract'
+# inputSigma = 1.5
+#
+# inputImage = 'synchromy-in-orange'
+# inputSigma = 1.2
+
+inputImage = 'john-ferren'
+inputSigma = 0.55
 ratios = {}
 images = ['mystery-history', 'tomb', 'spectrum-colors', 'abstract', 'synchromy-in-orange',
             'triangle', 'two-edges', 'three-rocks', 'john-ferren']
@@ -82,8 +97,11 @@ if __name__ == '__main__':
     preprocessImages()
 
     im = imread('../images/' + inputImage + '.jpg')
+    # plt.imshow(im)
+    # plt.title("Input Image " + inputImage)
+    # plt.show()
     edges = getEdges(im, inputSigma)
-    ratio = getEdgesRatio(edges, "abstract")
+    ratio = getEdgesRatio(edges, inputImage)
     print 'r: ', ratio
 
     findMatch(im, ratio)
