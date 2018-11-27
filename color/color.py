@@ -50,6 +50,8 @@ for i in range(queryHists.shape[0]):
 
 print results.shape
 
+np.save("results.npy", results)
+
 # sort the results
 # results = sorted([(v, k) for (k, v) in results.items()], reverse = True)
 
