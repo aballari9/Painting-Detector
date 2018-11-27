@@ -5,9 +5,10 @@ from skimage import feature
 from skimage.color import rgb2gray
 import os
 
-# inputImage = 'mona-lisa'
+inputImage = ''
 inputSigma = 0
-ratios = {}
+# ratios = {}
+ratios = np.load('ratios.npy').item()
 
 basedir = '../artSamples/'
 images = []
@@ -17,7 +18,6 @@ for im in np.sort(os.listdir(basedir)):
 num_of_images = len(images)
 sigmas = [0] * num_of_images
 
-threshold = 0.1
 results = []
 results_indicies = []
 
@@ -102,20 +102,16 @@ def getEdgesRatio(edges, name):
     # plt.show()
     return counts[1]/(counts[0] + counts[1])
 
-def findMatch(im, r):
+def findMatch(im, r, threshold):
     for image, ratio in ratios.iteritems():
         percentDifference = abs(r - ratio) / (0.5*(r + ratio))
         if percentDifference <= threshold:
             results.append(image)
             results_indicies.append(images.index(image))
     results_indicies.sort()
-    # print 'results: ', results
 
 def displayMatches():
-    print "Success" if inputImage in results else "Failure"
-    print len(results)
-    print results_indicies
-
+    print 'do not need'
     # i = len(results) + 1
     # plt.suptitle("Matches for " + inputImage)
     # plt.subplot(2, len(results), 1)
@@ -129,8 +125,8 @@ def displayMatches():
     #     i = i+1
     # plt.show()
 
-
-def getSubsetWithEdgeAnalysis(inputImage, realImage):
+def getSubsetWithEdgeAnalysis(inputImage, t):
+    threshold = t
     im = imread('../queryImages/' + inputImage + '.jpg')
     corners = getCoordinatesFromImage(im)
     im = getCroppedImage(im, corners)
@@ -138,34 +134,48 @@ def getSubsetWithEdgeAnalysis(inputImage, realImage):
     plt.imshow(im)
     plt.show()
 
-    im = imread(basedir + realImage + '.jpg')
-    preprocessImages()
+    # preprocessImages()
+    # np.save('ratios.npy', ratios)
 
     edges = getEdges(im, inputSigma)
     ratio = getEdgesRatio(edges, inputImage)
 
-    findMatch(im, ratio)
-    displayMatches()
+    findMatch(im, ratio, threshold)
+    # displayMatches()
     return results_indicies
 
 
 if __name__ == '__main__':
+    # returns 14 matches
+    inputImage = 'old-artist-chicago-picasso'
+    realImage = 'old-guitarist-chicago'
+    t = 0.5
+
+    # returns 109 matches
+    inputImage = 'wall-clocks'
+    realImage = 'the-persistence-of-memory-1931'
+    t = 0.40
+
+    # returns 52 matches
+    inputImage = 'the-scream'
+    realImage = 'the-scream-1893'
+    t = 0.20
+
+    # returns 15 matches
+    inputImage = 'starry-night'
+    realImage = 'the-starry-night'
+    t = 0.03
+
+    # doesn't work with the monaLisa - returns everything
     inputImage = 'mona-lisa'
     realImage = 'mona-lisa'
-    results_indicies = getSubsetWithEdgeAnalysis(inputImage, realImage)
+    t = 2.00
 
-    # im = imread('../queryImages/' + inputImage + '.jpg')
-    # corners = getCoordinatesFromImage(im)
-    # im = getCroppedImage(im, corners)
-    # plt.title('Cropped Input Image')
-    # plt.imshow(im)
-    # plt.show()
-    #
-    # im = imread(basedir + inputImage + '.jpg')
-    # preprocessImages()
-    #
-    # edges = getEdges(im, inputSigma)
-    # ratio = getEdgesRatio(edges, inputImage)
-    #
-    # findMatch(im, ratio)
-    # displayMatches()
+    # returns 141
+    inputImage = 'house-of-parliment-NotIdentical'
+    realImage = 'houses-of-parliament'
+    t = 0.30
+
+    results_indicies = getSubsetWithEdgeAnalysis(inputImage, t)
+    print "Success" if realImage in results else "Failure"
+    print len(results_indicies)
