@@ -3,49 +3,82 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import imread
 from skimage import feature
 from skimage.color import rgb2gray
+import os
 
-# mystery-history - https://www.wikiart.org/en/myron-stout/untitled-may-20-1950
-# tomb (Impressionism) - https://www.wikiart.org/en/owen-jones/tomb-near-cairo-1833
-# spectrum-colors (Hard Edge Paintings) - https://www.wikiart.org/en/ellsworth-kelly/spectrum-colors-arranged-by-chance-ii-1951
-# abstract - https://www.wikiart.org/en/myron-stout/untitled-1948
-# synchromy-in-orange - https://www.wikiart.org/en/morgan-russell/synchromy-in-orange-to-form-1914
-# triangle - https://www.wikiart.org/en/ellsworth-kelly/triangle-form-1951
-# two-edges - https://www.wikiart.org/en/barnett-newman/two-edges-1948
-# three-rocks - https://www.wikiart.org/en/john-ferren/three-rocks-1949
-# john-ferren - https://www.wikiart.org/en/john-ferren/untitled-1952-1
-
-# Good Results:
-# inputImage = 'john-ferren'
-# inputSigma = 0.55
-#
-# inputImage = 'tomb'
-# inputSigma = 1.7
-#
-#
-# Not so great Results:
-# inputImage = 'abstract'
-# inputSigma = 1.5
-#
-# inputImage = 'synchromy-in-orange'
-# inputSigma = 1.2
-
-inputImage = 'john-ferren'
-inputSigma = 0.55
+# inputImage = 'mona-lisa'
+inputSigma = 0
 ratios = {}
-images = ['mystery-history', 'tomb', 'spectrum-colors', 'abstract', 'synchromy-in-orange',
-            'triangle', 'two-edges', 'three-rocks', 'john-ferren']
-sigmas = [3.5, 1.8, 1, 2, 1.3, 2, 3, 2, 0.5]
+
+basedir = '../artSamples/'
+images = []
+for im in np.sort(os.listdir(basedir)):
+    images.append(im[:-4])
+
+num_of_images = len(images)
+sigmas = [0] * num_of_images
+
 threshold = 0.1
 results = []
+results_indicies = []
+
+def getCoordinatesFromImage(img1):
+
+    fig, ax1 = plt.subplots(1,1)
+    plt.suptitle('Select Corresponding Points')
+
+    ax1.set_title("Input Image")
+    # ax1.axis('off')
+    ax1.imshow(img1)
+
+    axis1_xValues = []
+    axis1_yValues = []
+
+    # Handle Onclick
+    def onclick(event):
+        if event.inaxes == ax1:
+            xVal = event.xdata
+            yVal = event.ydata
+            point = (xVal, yVal)
+            plt.plot(xVal, yVal, ',')
+            fig.canvas.draw()
+            print 'image 1: ', point
+            axis1_xValues.append(xVal)
+            axis1_yValues.append(yVal)
+
+    fig.canvas.mpl_connect('button_press_event', onclick)
+    plt.show()
+
+    if (len(axis1_xValues) < 4):
+        print 'Must have at least 4 coresponding points.'
+        return None, None
+
+    # Store points in a 2xn numpy array
+    points1 = np.zeros((2, len(axis1_xValues)))
+    points1[0] = axis1_yValues
+    points1[1] = axis1_xValues
+
+    return points1
+
+def getCroppedImage(im, corners):
+    top_left = corners[:,0]
+    top_right = corners[:,1]
+    bottom_right = corners[:,2]
+    bottom_left = corners[:,3]
+
+    min_row = int(min(top_left[0], top_right[0]))
+    max_row = int(max(bottom_right[0], bottom_left[0]))
+    min_col = int(min(top_left[1], bottom_left[1]))
+    max_col = int(max(top_right[1], bottom_right[1]))
+
+    return im[min_row:max_row + 1, min_col:max_col + 1,:]
 
 def preprocessImages():
     for image in range(len(images)):
-        im = imread('../images/' + images[image] + '.jpg')
+        im = imread(basedir + images[image] + '.jpg')
         edges = getEdges(im, sigmas[image])
         # displayOriginalAndEdges(im, edges)
         ratio = getEdgesRatio(edges, images[image])
         ratios[images[image]] = ratio
-    # print 'ratios: ', ratios
 
 def getEdges(im, s):
     # Run Canny Edge Detector on input image and return edges
@@ -63,10 +96,9 @@ def displayOriginalAndEdges(im, edges):
     plt.show()
 
 def getEdgesRatio(edges, name):
-    # Why do values range from 0 to 1 and not 0 to 255
     intensities = np.reshape(edges, (-1, 1))  # Reshape to 1-D
     counts, bins, bars = plt.hist(intensities, bins=2, edgecolor='black', linewidth=1.2)
-    plt.title("Histogram of " + name + " Image")
+    # plt.title("Histogram of " + name + " Image")
     # plt.show()
     return counts[1]/(counts[0] + counts[1])
 
@@ -75,34 +107,65 @@ def findMatch(im, r):
         percentDifference = abs(r - ratio) / (0.5*(r + ratio))
         if percentDifference <= threshold:
             results.append(image)
-    print 'results: ', results
+            results_indicies.append(images.index(image))
+    results_indicies.sort()
+    # print 'results: ', results
 
 def displayMatches():
-    i = len(results) + 1
-    plt.suptitle("Matches for " + inputImage)
-    plt.subplot(2, len(results), 1)
-    plt.title("Input Image - " + inputImage)
-    plt.imshow(imread('../images/' + inputImage + '.jpg'))
+    print "Success" if inputImage in results else "Failure"
+    print len(results)
+    print results_indicies
 
-    for image in results:
-        plt.subplot(2, len(results), i)
-        plt.title("Output Image - " + image)
-        plt.imshow(imread('../images/' + image + '.jpg'))
-        i = i+1
+    # i = len(results) + 1
+    # plt.suptitle("Matches for " + inputImage)
+    # plt.subplot(2, len(results), 1)
+    # plt.title("Input Image - " + inputImage)
+    # plt.imshow(imread('../images/' + inputImage + '.jpg'))
+    #
+    # for image in results:
+    #     plt.subplot(2, len(results), i)
+    #     plt.title("Output Image - " + image)
+    #     plt.imshow(imread('../images/' + image + '.jpg'))
+    #     i = i+1
+    # plt.show()
+
+
+def getSubsetWithEdgeAnalysis(inputImage, realImage):
+    im = imread('../queryImages/' + inputImage + '.jpg')
+    corners = getCoordinatesFromImage(im)
+    im = getCroppedImage(im, corners)
+    plt.title('Cropped Input Image')
+    plt.imshow(im)
     plt.show()
 
-
-
-if __name__ == '__main__':
+    im = imread(basedir + realImage + '.jpg')
     preprocessImages()
 
-    im = imread('../images/' + inputImage + '.jpg')
-    # plt.imshow(im)
-    # plt.title("Input Image " + inputImage)
-    # plt.show()
     edges = getEdges(im, inputSigma)
     ratio = getEdgesRatio(edges, inputImage)
-    print 'r: ', ratio
 
     findMatch(im, ratio)
     displayMatches()
+    return results_indicies
+
+
+if __name__ == '__main__':
+    inputImage = 'mona-lisa'
+    realImage = 'mona-lisa'
+    results_indicies = getSubsetWithEdgeAnalysis(inputImage, realImage)
+
+    # im = imread('../queryImages/' + inputImage + '.jpg')
+    # corners = getCoordinatesFromImage(im)
+    # im = getCroppedImage(im, corners)
+    # plt.title('Cropped Input Image')
+    # plt.imshow(im)
+    # plt.show()
+    #
+    # im = imread(basedir + inputImage + '.jpg')
+    # preprocessImages()
+    #
+    # edges = getEdges(im, inputSigma)
+    # ratio = getEdgesRatio(edges, inputImage)
+    #
+    # findMatch(im, ratio)
+    # displayMatches()
