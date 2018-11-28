@@ -435,7 +435,7 @@
 
       <br><br>
       <u>Forming the Comprehensive Painting Detector</u>
-      <br><br>  
+      <br><br>
       To tie in individually tested methods of image analysis (edge, color, and feature) into a comprehensive painting detector, we combined parts of the methods using a rating system. We collected a sample of 159 images from the WikiArt Database and randomly selected 5 query images. The sample contains images of the actual painting, while the query images are images of the paintings surrounded by a frame (as in a museum). Query Images were resized and compressed in order to speed up detection time.
       <br><br>
 
@@ -450,7 +450,7 @@
       </div>
       <br><br>
 
-      As we found that edge detection accurately distinguished images based their edge structure, we used this method to construct a subset of the sample to aid feature and color detection in finding the right match faster. Through edge detection, we preprocessed all the images in sample and stored each image’s white pixel ratio using the Canny Edge Detector. For the passed in query image (manually cropped to exclude the frame and everything beyond it), we formed a subset of images with a percent difference in the white pixel ratio that is less than a specific threshold. Previously, the accuracy of the subset depended on the sigma specified for each image. Since setting a specific sigma to reduce noise for every individual image in a sample this large is not optimal, we decided to keep the threshold as a hyperparameter, tuning it to the passed in query image. The following results display the minimum threshold set for each query image and the resulting number of images in the subset that contains the right match formed. 
+      As we found that edge detection accurately distinguished images based their edge structure, we used this method to construct a subset of the sample to aid feature and color detection in finding the right match faster. Through edge detection, we preprocessed all the images in sample and stored each image’s white pixel ratio using the Canny Edge Detector. For the passed in query image (manually cropped to exclude the frame and everything beyond it), we formed a subset of images with a percent difference in the white pixel ratio that is less than a specific threshold. Previously, the accuracy of the subset depended on the sigma specified for each image. Since setting a specific sigma to reduce noise for every individual image in a sample this large is not optimal, we decided to keep the threshold as a hyperparameter, tuning it to the passed in query image. The following results display the minimum threshold set for each query image and the resulting number of images in the subset that contains the right match formed.
       <br><br>
 
       <table style="width:100%">
@@ -488,10 +488,10 @@
 
       <br><br>
 
-      The optimality of the subset heavily depended on the query image since blurring was not used to take out extra noise. For example, the “mona-lisa” query image was significantly more blurry than it match in the sample images. It produced the least effective subset since the edge were not picked up as well. The most effective subsets were formed for “old-artist-chicago-picasso”, “starry-night”, and  “the-scream” since the images were of the same quality as their matches. The subsets for these images were reduced to less than about 30% of the original sample.  
+      The optimality of the subset heavily depended on the query image since blurring was not used to take out extra noise. For example, the “mona-lisa” query image was significantly more blurry than it match in the sample images. It produced the least effective subset since the edge were not picked up as well. The most effective subsets were formed for “old-artist-chicago-picasso”, “starry-night”, and  “the-scream” since the images were of the same quality as their matches. The subsets for these images were reduced to less than about 30% of the original sample.
       <br><br>
       After decreasing the subset of the images that need to analyzed with the edge detector we then ran feature and color detectors to efficiently get more accurate results. Based on previous experiments we saw that feature detection yielded much better results than using a color detector. So after we ran the algorithms on the smaller subset and  received a score for images for each algorithms, we had to weigh each of the scores differently. We weighed the feature detection with a weight of .7 and weighed the color detector with a weight of .3. Weighing the algorithms in this manner resulted in very accurate query results.  The implementation of each of the algorithms stayed the same as the last update, now we are running them together for more accurate results.
-  
+
       <br><br>
 
       <!-- Qualitative Results -->
@@ -537,7 +537,7 @@
       </div>
       <br><br>
 
-      As shown in runtime, the Mona Lisa took the longest amount of time. In fact, it was the longest by far and the only one that took longer than 20 seconds. We believe that this is due to it having the largest file size, and due to edge detection not narrowing down the set of images. If edge detection were to work better on Mona Lisa, we would expect to see much better results. 
+      As shown in runtime, the Mona Lisa took the longest amount of time. In fact, it was the longest by far and the only one that took longer than 20 seconds. We believe that this is due to it having the largest file size, and due to edge detection not narrowing down the set of images. If edge detection were to work better on Mona Lisa, we would expect to see much better results.
 
       <br><br>
 
@@ -548,6 +548,8 @@
 
       <br><br>
       Ruling out texture detection was a major surprise to our team. We imagined it originally to yield the most accurate results. Instead, we found that feature detection gave us the most accuracy, and so we weighted it as such. We were able to use edge detection to narrow down our image set, rather than use it to score images, as we originally planned. This change, however, seemed to help our results and drastically shorten our runtime.
+      <br><br>
+      The color detection worked remarkably well when tested originally on the small sample size, but was not as accurate when testing on larger datasets. The main issue with the color histogram comparison methodology was that the size of the painting frame and the non-painting background in the query images messed up the histogram of the search. Although the scores were still pretty high for the image that matched perfectly, the scores were a little higher for another picture that had more of the background and frame color values. In the future, to improve on the work of the color detector, we could first detect the painting from the query, and only run the color detector on the subset of pixels that form the painting region in the query.
       <br><br>
       The painting detector’s efficiency could be improved through properly setting appropriate sigma values during Canny Edge Detection for the images in the sample and setting the sigma for the query image as a hyperparameter. In practicality, setting these manually would not be useful. Training a neural net to output an appropriate sigma for an input image could aid in this process. While we were able to get very accurate results we can speed up this process by applying a binary search tree when locating the matched image. Right now we look at all the images when we try to find a match, but if we were to place these images in a graph we can cut down the search time drastically. We did not see a problem with run time for the small dataset that we are using, but if we were to use a huge data set, lookup time could be huge issue. If we were to expand this project, we would create .npy files containing all the information that could be gained from every image of the database to speed up painting recognition as much as possible. On a small scale, however, our system worked very well.
       <br><br>
