@@ -53,7 +53,7 @@
       <!-- Introduction -->
       <h3>Abstract</h3>
       <br><br>
-      The motivation for this project is to figure out the combination of different detection methods which best match an input image to its match within a database of paintings. The application will be used my museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracy on image matching. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and does so in approximately 15 seconds.
+      The motivation for this project is to figure out the combination of different detection methods which best match an input image to its match within a database of paintings. The application will be used my museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracy on image matching. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and for the most part, does so in approximately 20 seconds or less.
       <br><br>
 
       <br><br>
@@ -501,35 +501,35 @@
       The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results). The resulting image is that with the highest score. From there, we match the resulting image to its name, artist, date painted, and painting style, and display that additional information.
       <br><br>
 
-      <center><i>Query Image: Mona Lisa.</i></center>
+      <center><i>Query Image: Mona Lisa. Time taken: 1 minute and 15 seconds. </i></center>
       <br><br>
       <div style="text-align: center;">
         <img style="height: 300px;" alt="" src="queryImages/mona-lisa.jpg">
         <img style="height: 300px;" alt="" src="queryResults/MonaResult.png">
       </div>
       <br><br>
-      <center><i>Query Image: The Scream.</i></center>
+      <center><i>Query Image: The Scream. Time taken: 11 seconds. </i></center>
       <br><br>
       <div style="text-align: center;">
         <img style="height: 300px;" alt="" src="queryImages/the-scream.jpg">
         <img style="height: 300px;" alt="" src="queryResults/ScreamResult.png">
       </div>
       <br><br>
-      <center><i>Query Image: Persistence of Memory.</i></center>
+      <center><i>Query Image: Persistence of Memory. Time taken: 6 seconds. </i></center>
       <br><br>
       <div style="text-align: center;">
         <img style="height: 300px;" alt="" src="queryImages/wall-clocks.jpg">
         <img style="height: 300px;" alt="" src="queryResults/MemoryResult.png">
       </div>
       <br><br>
-      <center><i>Query Image: Starry Night.</i></center>
+      <center><i>Query Image: Starry Night. Time taken: 19 seconds. </i></center>
       <br><br>
       <div style="text-align: center;">
         <img style="height: 300px;" alt="" src="queryImages/starry-night.jpg">
         <img style="height: 300px;" alt="" src="queryResults/StarryResult.png">
       </div>
       <br><br>
-      <center><i>Query Image: The Old Blind Guitarist.</i></center>
+      <center><i>Query Image: The Old Blind Guitarist. Time taken: 16 seconds. </i></center>
       <br><br>
       <div style="text-align: center;">
         <img style="height: 300px;" alt="" src="queryImages/old-artist-chicago-picasso.jpg">
@@ -537,6 +537,9 @@
       </div>
       <br><br>
 
+      As shown in runtime, the Mona Lisa took the longest amount of time. In fact, it was the longest by far and the only one that took longer than 20 seconds. We believe that this is due to it having the largest file size, and due to edge detection not narrowing down the set of images. If edge detection were to work better on Mona Lisa, we would expect to see much better results. 
+
+      <br><br>
 
 
       <!-- Conclusion and Future Work -->
