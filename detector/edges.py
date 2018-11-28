@@ -149,7 +149,7 @@ if __name__ == '__main__':
     # returns 14 matches
     inputImage = 'old-artist-chicago-picasso'
     realImage = 'old-guitarist-chicago'
-    t = 0.5
+    t = 0.50
 
     # returns 109 matches
     inputImage = 'wall-clocks'

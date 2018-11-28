@@ -5,24 +5,8 @@ import glob
 import pickle
 
 
-def runFeature(i, indx):
-	imDir = "../artSamples/"
+def runFeature(img1, indx, keypoints, descriptors):
 
-	imnames = glob.glob(imDir + '*.jpg')
-	imnames = sorted(imnames)
-
-	# descriptors = np.empty((1,159))
-	# keypoints = np.empty((1,159))
-	descriptors = []
-	keypoints = []
-	allScores = np.empty((6,159),dtype = 'uint16')
-	matchList = []
-	sift = cv.xfeatures2d.SIFT_create()
-	for i in range(len(imnames)):
-		img = cv.imread(imnames[i])
-		kp, des = sift.detectAndCompute(img,None)
-		descriptors.append(des)
-		keypoints.append(kp)
 
 	# np.save("keypoints.npy",keypoints)
 	# np.save("descriptors.npy",descriptors)
@@ -35,29 +19,10 @@ def runFeature(i, indx):
 
 	# keypoints = np.load("keypoints.npy",keypoints)
 	# descriptors = np.load("descriptors.npy",descriptors)
-
-	house = cv.imread('../queryImages/house-of-parliment-NotIdentical.jpg',0)
-	mona = cv.imread('../queryImages/mona-lisa.jpg',0)
-	wall = cv.imread('../queryImages/wall-clocks.jpeg',0)
-	scream = cv.imread('../queryImages/the-scream.jpeg',0)
-	starry = cv.imread('../queryImages/starry-night.jpeg',0)
-	picasso = cv.imread('../queryImages/old-artist-chicago-picasso.jpg',0)
-
-	if i == 0:
-		img1 = house
-	elif i == 1:
-		img1 = mona
-	elif i == 2:
-		img1 = wall
-	elif i == 3:
-		img1 = scream
-	elif i == 4:
-		img1 = starry
-	elif i == 5:
-		img1 = picasso
+	sift = cv.xfeatures2d.SIFT_create()
 
 	scores = np.empty((1,159),dtype = 'uint16')
-	for f in indx:
+	for f in range(159):
 		# Initiate SIFT detector
 		# find the keypoints and descriptors with SIFT
 		kp1, des1 = sift.detectAndCompute(img1,None)
@@ -83,7 +48,5 @@ def runFeature(i, indx):
 		scores[:,f] = countGood
 		# img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
 		# plt.imshow(img3,),plt.show()
-		allScores[i,:] = scores[:]
-		matchList.append(imnames[np.argmax(allScores[i])])
-	return matchList
+	return scores
 	
