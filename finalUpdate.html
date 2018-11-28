@@ -53,7 +53,7 @@
       <!-- Introduction -->
       <h3>Abstract</h3>
       <br><br>
-      The motivation for this project is to figure out the combination of different detection methods which best match an input image to its match within a database of paintings. The application will be used my museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracy on image matching. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and does so in XXX seconds.
+      The motivation for this project is to figure out the combination of different detection methods which best match an input image to its match within a database of paintings. The application will be used my museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracy on image matching. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and does so in approximately 15 seconds.
       <br><br>
 
       <br><br>
@@ -92,7 +92,7 @@
       learn more about. Our system will then take as input these images and, using a
       variety of known-techniques, find the painting’s match if it exists in the
       database. The output of the system will be the original painting, as well as
-      information detailing the painting—it’s creator and a description of painting.
+      information detailing the painting—it’s creator date, and style.
       The authors of this paper believe that this will be a valuable and important
       tool, allowing museum visitors to focus on seeing art while they’re at the
       museum and learning more about their favorite pieces at home. In order to label
@@ -487,7 +487,7 @@
       <h3>Qualitative Results</h3>
 
       <br><br>
-      The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results). The resulting image is that with the highest score.
+      The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results). The resulting image is that with the highest score. From there, we match the resulting image to its name, artist, date painted, and painting style, and display that additional information.
       <br><br>
 
       <center><i>Query Image: Mona Lisa.</i></center>
