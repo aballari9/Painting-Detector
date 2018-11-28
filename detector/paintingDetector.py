@@ -13,6 +13,7 @@ i = 5
 
 
 
+
 imDir = "../artSamples/"
 
 imnames = glob.glob(imDir + '*.jpg')
@@ -114,6 +115,7 @@ date = ("Date: " + date + "  ")
 style = ("Style: " + style + "  ")
 
 im = cv.imread(resultIm)
+cv.namedWindow(name + artist + date + style, flags = 0)
 cv.imshow(name + artist + date + style, im)
 
 wait = raw_input("Hit any buttong to continue")

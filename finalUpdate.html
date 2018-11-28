@@ -68,9 +68,14 @@
         <img style="height: 400px;" alt="" src="monaLisaPhoto.jpg">
         <img style="height: 400px;" alt="" src="monaLisa.jpg">
         <br><br>
+        Painting: Mona Lisa
+        <br><br>
         Artist: Leonardo da Vinci
         <br><br>
-        Description: 16th-century portrait painted in oil during the Renaissance in Florence, Italy. Many people think Mona Lisa's smile is mysterious. It is so often studied, recognized, and copied that it is the most famous painting.
+        Date: 1504
+        <br><br>
+        Style: High Renaissance
+        <br><br>
 
       </div>
       <br><br>
@@ -185,8 +190,8 @@
       <br><br>
 
 
-      <!-- Experiments and Results -->
-      <h3>Experiments and results</h3>
+      <!-- Results -->
+      <h3>Results from Individual Method Testing</h3>
 
       <u>Method 1 - Texture</u>
       <br><br>
@@ -425,27 +430,114 @@
       Intersection seems to produce the highest results. Next parameters that we can tune are the bin size. We also need to run this with a larger data set to determine what a high enough intersection score will determine similarity and what score indicates a clear distinction between two paintings.<br><br>
 
 
+      <!-- Overall Experiments and Results -->
+      <h3>Results of Complete Painting Detector</h3>
+
+      <br><br>
+      <u>Forming the Comprehensive Painting Detector</u>
+      <br><br>  
+      To tie in individually tested methods of image analysis (edge, color, and feature) into a comprehensive painting detector, we combined parts of the methods using a rating system. We collected a sample of 159 images from the WikiArt Database and randomly selected 5 query images. The sample contains images of the actual painting, while the query images are images of the paintings surrounded by a frame (as in a museum). Query Images were resized and compressed in order to speed up detection time.
+      <br><br>
+
+      As we found that edge detection accurately distinguished images based their edge structure, we used this method to construct a subset of the sample to aid feature and color detection in finding the right match faster. Through edge detection, we preprocessed all the images in sample and stored each image’s white pixel ratio using the Canny Edge Detector. For the passed in query image (manually cropped to exclude the frame and everything beyond it), we formed a subset of images with a percent difference in the white pixel ratio that is less than a specific threshold. Previously, the accuracy of the subset depended on the sigma specified for each image. Since setting a specific sigma to reduce noise for every individual image in a sample this large is not optimal, we decided to keep the threshold as a hyperparameter, tuning it to the passed in query image. The following results display the minimum threshold set for each query image and the resulting number of images in the subset that contains the right match formed. 
+      <br><br>
+
+      <table style="width:100%">
+        <tr>
+          <th>Query Image</th>
+          <th>Threshold</th>
+          <th>Subset Size</th>
+        </tr>
+        <tr>
+          <td>The Scream</td>
+          <td>0.20</td>
+          <td>52</td>
+        </tr>
+        <tr>
+          <td>Mona Lisa</td>
+          <td>2.00</td>
+          <td>159</td>
+        </tr>
+        <tr>
+          <td>The Blind Guitarist</td>
+          <td>0.50</td>
+          <td>14</td>
+        </tr>
+        <tr>
+          <td>Starry Night</td>
+          <td>0.03</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>The Persistence of Memory</td>
+          <td>0.40</td>
+          <td>109</td>
+        </tr>
+      </table>
+
+      <br><br>
+
+      The optimality of the subset heavily depended on the query image since blurring was not used to take out extra noise. For example, the “mona-lisa” query image was significantly more blurry than it match in the sample images. It produced the least effective subset since the edge were not picked up as well. The most effective subsets were formed for “old-artist-chicago-picasso”, “starry-night”, and  “the-scream” since the images were of the same quality as their matches. The subsets for these images were reduced to less than about 30% of the original sample.  
+      <br><br>
+      After decreasing the subset of the images that need to analyzed with the edge detector we then ran feature and color detectors to efficiently get more accurate results. Based on previous experiments we saw that feature detection yielded much better results than using a color detector. So after we ran the algorithms on the smaller subset and  received a score for images for each algorithms, we had to weigh each of the scores differently. We weighed the feature detection with a weight of .7 and weighed the color detector with a weight of .3. Weighing the algorithms in this manor resulted in very accurate query results.  The implementation of each of the algorithms stayed the same as the last update, now we are running them together for more accurate results.
+  
+      <br><br>
+
+      <!-- Qualitative Results -->
+      <h3>Qualitative Results</h3>
+
+      <br><br>
+      The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results). The resulting image is that with the highest score.
+      <br><br>
+
+      <center><i>Query Image: Mona Lisa.</i></center>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 300px;" alt="" src="queryImages/mona-lisa.jpg">
+        <img style="height: 300px;" alt="" src="queryResults/MonaResult.png">
+      </div>
+      <br><br>
+      <center><i>Query Image: The Scream.</i></center>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 300px;" alt="" src="queryImages/the-scream.jpg">
+        <img style="height: 300px;" alt="" src="queryResults/ScreamResult.png">
+      </div>
+      <br><br>
+      <center><i>Query Image: Persistence of Memory.</i></center>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 300px;" alt="" src="queryImages/wall-clocks.jpg">
+        <img style="height: 300px;" alt="" src="queryResults/MemoryResult.png">
+      </div>
+      <br><br>
+      <center><i>Query Image: Starry Night.</i></center>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 300px;" alt="" src="queryImages/starry-night.jpg">
+        <img style="height: 300px;" alt="" src="queryResults/StarryResult.png">
+      </div>
+      <br><br>
+      <center><i>Query Image: The Old Blind Guitarist.</i></center>
+      <br><br>
+      <div style="text-align: center;">
+        <img style="height: 300px;" alt="" src="queryImages/old-artist-chicago-picasso.jpg">
+        <img style="height: 300px;" alt="" src="queryResults/GuitaristResult.png">
+      </div>
+      <br><br>
+
+
+
       <!-- Conclusion and Future Work -->
       <h3>Conclusion and Future Work</h3>
 
-      <br><br>
-      Ultimately, this method was not able to yield consistent or impressive results. This makes sense given the very nature of paintings: most don’t have any sort of fine-grained, repeatable pattern in them, which is what texture detection depends on finding. Due to these results, we have decided that a texture-based classification approach is not feasible for this classification problem and is thus no longer being considered.
 
       <br><br>
-      Finding matches utilizing edges does help narrow down on a set of images. This approach works the best when distinguishing images with soft edges with images with hard edges. However, it cannot be solely used for distinguish amongst images with similar hard edges. The free parameter sigma is used to control how much to blur an input image and significantly
-      affects the the accuracy at which the images with soft edges are detected. Since this is an easier parameter to control than the threshold values for maximum supression, we decided to use skimage's canny edge detector instead of OpenCV's canny edge detector. This approach processed the small sample set and found matches relatively fast. We will have to test the performance of this approach on a significantly larger data set of images with a greater variety of edges. We will also explore if we can get more information other than the white pixel to total pixel ratio from the canny edge detector. Finding matches though edge analysis is definitely impactfull and will be a significant componenent of the final painting detector.
-
+      Ruling out texture detection was a major surprise to our team. We imagined it originally to yield the most accurate results. Instead, we found that feature detection gave us the most accuracy, and so we weighted it as such. We were able to use edge detection to narrow down our image set, rather than use it to score images, as we originally planned. This change, however, seemed to help our results and drastically shorten our runtime.
       <br><br>
-      We have only run one of the three color algorithms that was proposed. We
-      still need to try the k-means clustering algorithm as a way of determining
-      whether 2 paintings map to the same clusters or not. We also still need to
-      implement the method of using neural nets to remember the color compositions of various paintings and their artists. We also need to expand the dataset size from 4 images to the full data set of 1000s of images. We need to check whether or not the intersection is optimal in
-      that case as well. Although this will take significant amounts of time to run, the results should reveal the effectiveness of color as a means of
-      classifying paintings. This will also allow our Neural net to be effective. As far as the parameters are concerned, we still need to figure out what the best bin-size is that optimizes the scores generated.
-
+      The painting detector’s efficiently could be improved through properly setting appropriate sigma values during Canny Edge Detection for the images in the sample and setting the sigma for the query image as a hyperparameter. In practicality, setting these manually would not be useful. Training a neural net to output an appropriate sigma for an input image could aid in this process. While we were able to get very accurate results we can speed up this process by applying a binary search tree when locating the matched image. Right now we look at all the images when we try to find a match, but if we were to place these images in a graph we can cut down the search time drastically. We did not see a problem with run time for the small dataset that we are using, but if we were to use a huge data set, lookup time could be huge issue. If we were to expand this project, we would create .npy files containing all the information that could be gained from every image of the database to speed up painting recognition as much as possible. On a small scale, however, our system worked very well.
       <br><br>
-      From feature matching, we can conclude that it is in itself a valuable tool for matching the photos to paintings. In both experiments, the correct painting had a significantly larger number of matches than the other paintings. We beleive, as of now, that feature matching will be very valuable in the remainder of this project.
-
+      Overall, as a group, we are very happy with how our project turned out. We were able to tackle our problem statement and produce accurate, helpful results.
       <br><br>
 
       <!-- References -->
