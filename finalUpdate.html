@@ -53,20 +53,17 @@
       <!-- Introduction -->
       <h3>Abstract</h3>
       <br><br>
-      The motivation for this project is to figure out the combination of different detection methods which best match an input image to its match within a database of paintings. The application will be used my museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracy on image matching. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and for the most part, does so in approximately 20 seconds or less.
+      The purpose of this project is to figure out the combination of different image detection methods which best maps a query image to its closest match within a database of paintings. The application will be used by museum-goers to look up and learn more about the paintings they liked during their museum visit. Initially, we implemented and tested several matching algorithms individually to test their accuracies in retrieving a version of the query image contained within the database. From there, we have combined the detection methods in order to maximize the number of query images that match their result image, while also considering query speed. Our final program achieves 100% query accuracy on our test set when querying against a diverse dataset, and for the most part, does so in approximately 20 seconds or less.
       <br><br>
 
-      <br><br>
-
-
+      <br>
       <!-- Teasure Figure -->
-      <h3>Teaser Figure</h3>
       <br><br>
       Our first image would be the input, and our ideal output would be the actual painting with artist name and painting description. Below is an example with the Mona Lisa.
       <br><br>
       <div style="text-align: center;">
-        <img style="height: 400px;" alt="" src="monaLisaPhoto.jpg">
-        <img style="height: 400px;" alt="" src="monaLisa.jpg">
+        <img style="height: 400px;" alt="" src="./queryImages/mona-lisa.jpg">
+        <img style="height: 400px;" alt="" src="./artSamples/mona-lisa.jpg">
         <br><br>
         Painting: Mona Lisa
         <br><br>
@@ -92,30 +89,29 @@
       learn more about. Our system will then take as input these images and, using a
       variety of known-techniques, find the painting’s match if it exists in the
       database. The output of the system will be the original painting, as well as
-      information detailing the painting—it’s creator date, and style.
+      information detailing the painting—its creator, date, and style.
       The authors of this paper believe that this will be a valuable and important
       tool, allowing museum visitors to focus on seeing art while they’re at the
       museum and learning more about their favorite pieces at home. In order to label
-      these paintings well, we will analyze several different computer vision
-      approaches, focusing on efficiency and accuracy.
+      these paintings well, we combine several different computer vision
+      approaches and focus on efficiency and accuracy.
 
       <br><br>
 
 
       <!-- Approach -->
       <h3>Approach</h3>
-      We have identified several approaches we will use to detect paintings—texture
-      analysis, edge detection, color analysis, and feature detection. We shall first
-      tune each of these different approaches to the images. Then, we shall use a
-      combination of these approaches to find an efficient algorithm that labels as
-      many paintings correctly as possible.
+      We have experimented with several approaches to detect paintings—texture
+      analysis, edge detection, color analysis, and feature detection. We first
+      individually tuned the parameters of each of these different approaches. Then, we used a combination of these approaches to find an efficient algorithm that labels as
+      many paintings correctly as possible. In this section, we describe the approaches attempted as well as their motivations.
 
       <br><br>
 
       <u>Method 1 - Texture</u>
 
       <br><br>
-      We believe texture analysis will improve the overall result of our system since different paintings may have similar colors and features but may be of two different mediums. For example, oils paints are thicker than watercolor paints. Even though an oil painting of a city landscape contains the same features and colors as a watercolor painting of the same city landscape, the texture of the oil painting may be more rugged than the watercolor paintings. <br><br>
+      We believe texture analysis will improve the overall result of our system since different paintings may have similar colors and features but may be of two different mediums. For example, oils paints are thicker than watercolor paints. Even though an oil painting of a city landscape contains the same features and colors as a watercolor painting of the same city landscape, the texture of the oil painting may be more rugged than the watercolor painting's. <br><br>
 
       We will use local binary patterns texture matching, a well-studied technique that is invariant to illumination as well as translation, the two primary ways our inputs will differ from our outputs. LBP matching works by forming an LBP descriptor, which is calculated by choosing n points on a circle of specified radius around a reference pixel and creating an n-bit number, where the ith bit is set to 1 if the ith value is greater than the reference pixel value, and 0 otherwise. This process is repeated for every pixel in the gray-scaled image, and thus the LBP descriptor is the same size as the original image. After the LBP descriptor has been created, a normalized histogram of the values is created. This process is repeated for every image in the training set. <br><br>
 
@@ -162,8 +158,8 @@
       color combinations and matching the input image with other pictures that have similar histograms of the pixel
       colors. However, a much more robust classification based on the colors of the images could be achieved using
       neural networks. If we train our classifier to remember the color values of the pixels given a set of images,
-      then, based on an input image’s color values, we can predict which of the image this is coming from. We can use
-      methods in scikit to implement the neural network, and certain methods in OpenCV to derive the color values of an
+      then, based on an input image’s color values, we can predict which of the images it matches. We can use
+      methods in scikit to implement the neural network and certain methods in OpenCV to derive the color values of an
       image.
 
       <a href="http://www.primaryobjects.com/2013/06/17/an-intelligent-approach-to-image-classification-by-color/">View
@@ -180,7 +176,7 @@
       <br><br>
       We plan to use feature matching as another part of our approach for scoring paintings to see which one is our
       target painting. Using this, we can easily track specific keypoints and descriptors between our sample photos and the
-      target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Using OpenCV's feature matching, we used a Fast Library for Approximate Nearest Neighbors (FLANN) based matcher to analyze the descriptors from the 2 images and match them up. Next, we filtered the matches so to eliminate outliers. Using the remaining matches, we could identify the features that matched between the two images.
+      target paintings. Features will be areas with the maximum variation when moved in all the regions around it. Using OpenCV's feature matching, we will use a Fast Library for Approximate Nearest Neighbors (FLANN) based matcher to analyze the descriptors from the 2 images and match them up. Next, we will filter the matches so as to eliminate outliers. Using the remaining matches, we can identify the features that match between the two images.
 
       <br><br>
       <div style="text-align: center;">
@@ -450,7 +446,7 @@
       </div>
       <br><br>
 
-      As we found that edge detection accurately distinguished images based their edge structure, we used this method to construct a subset of the sample to aid feature and color detection in finding the right match faster. Through edge detection, we preprocessed all the images in sample and stored each image’s white pixel ratio using the Canny Edge Detector. For the passed in query image (manually cropped to exclude the frame and everything beyond it), we formed a subset of images with a percent difference in the white pixel ratio that is less than a specific threshold. Previously, the accuracy of the subset depended on the sigma specified for each image. Since setting a specific sigma to reduce noise for every individual image in a sample this large is not optimal, we decided to keep the threshold as a hyperparameter, tuning it to the passed in query image. The following results display the minimum threshold set for each query image and the resulting number of images in the subset that contains the right match formed.
+      As we found that edge detection accurately distinguished images based on their edge structure, we used this method to construct a narrowed-down subset of the samples on which feature and color detection will find the right match. Through edge detection, we preprocessed all the images in our database and stored each image’s white pixel ratio using the Canny Edge Detector. For the passed in query image (manually cropped to exclude the frame and everything beyond it), we formed a subset of images with a percent difference in the white pixel ratio that is less than a specific threshold. Previously, the accuracy of the subset depended on the sigma specified for each image. Since setting a specific sigma to reduce noise for every individual image in a sample this large is not optimal, we decided to keep the threshold as a hyperparameter, tuning it to the passed in query image. The following results display the minimum threshold set for each query image and the resulting number of images in the subset that contains the right match.
       <br><br>
 
       <table style="width:100%">
@@ -488,9 +484,9 @@
 
       <br><br>
 
-      The optimality of the subset heavily depended on the query image since blurring was not used to take out extra noise. For example, the “mona-lisa” query image was significantly more blurry than it match in the sample images. It produced the least effective subset since the edge were not picked up as well. The most effective subsets were formed for “old-artist-chicago-picasso”, “starry-night”, and  “the-scream” since the images were of the same quality as their matches. The subsets for these images were reduced to less than about 30% of the original sample.
+      The optimality of the subset heavily depended on the query image since blurring was not used to take out extra noise. For example, the “mona-lisa” query image was significantly more blurry than its match in the sample images. It produced the least effective subset since the edges were not picked up as well. The most effective subsets were formed for “old-artist-chicago-picasso”, “starry-night”, and  “the-scream” since the images were of the same quality as their matches. The subsets for these images were reduced to less than about 30% of the original sample.
       <br><br>
-      After decreasing the subset of the images that need to analyzed with the edge detector we then ran feature and color detectors to efficiently get more accurate results. Based on previous experiments we saw that feature detection yielded much better results than using a color detector. So after we ran the algorithms on the smaller subset and  received a score for images for each algorithms, we had to weigh each of the scores differently. We weighed the feature detection with a weight of .7 and weighed the color detector with a weight of .3. Weighing the algorithms in this manner resulted in very accurate query results.  The implementation of each of the algorithms stayed the same as the last update, now we are running them together for more accurate results.
+      After determining, via edge detection, the subset of images that need to be analyzed, we ran feature and color detectors to efficiently get more accurate results. Based on previous experiments, we saw that feature detection yielded much better results than using a color detector. So after we ran the algorithms on the smaller subset and received a score for images for each algorithms, we had to weigh each of the scores differently. We weighed the feature detection with a weight of .7 and weighed the color detector with a weight of .3. Weighing the algorithms in this manner resulted in very accurate query results. The implementation of each of the algorithms stayed the same as the last update, but now we are running them together for more accurate results.
 
       <br><br>
 
@@ -498,7 +494,7 @@
       <h3>Qualitative Results</h3>
 
       <br><br>
-      The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results). The resulting image is that with the highest score. From there, we match the resulting image to its name, artist, date painted, and painting style, and display that additional information.
+      The process of running our script is as follows: First, we load and display the query images, shown below. Then, the user clicks on the four corners of the painting (to yeild better results and exclude any irrelevant parts of the picture). Next, edge detection narrows down our possible matches to a subset using a threshold. Finally, the image is scored based on a weighted sum of feature and color detection scores (texture detection did not prove to give us helpful results, as described earlier). The resulting image is that with the highest score. From there, we match the resulting image to its name, artist, date, and painting style, and we display this information.
       <br><br>
 
       <center><i>Query Image: Mona Lisa. Time taken: 1 minute and 15 seconds. </i></center>
@@ -537,7 +533,7 @@
       </div>
       <br><br>
 
-      As shown in runtime, the Mona Lisa took the longest amount of time. In fact, it was the longest by far and the only one that took longer than 20 seconds. We believe that this is due to it having the largest file size, and due to edge detection not narrowing down the set of images. If edge detection were to work better on Mona Lisa, we would expect to see much better results.
+      As shown in runtime, the Mona Lisa took the longest amount of time. In fact, it was the longest by far and the only one that took longer than 20 seconds. We believe that this is due to it having the largest file size and due to edge detection not narrowing down the set of images. If edge detection were to work better on Mona Lisa, we would expect to see much better results.
 
       <br><br>
 
@@ -549,9 +545,9 @@
       <br><br>
       Ruling out texture detection was a major surprise to our team. We imagined it originally to yield the most accurate results. Instead, we found that feature detection gave us the most accuracy, and so we weighted it as such. We were able to use edge detection to narrow down our image set, rather than use it to score images, as we originally planned. This change, however, seemed to help our results and drastically shorten our runtime.
       <br><br>
-      The color detection worked remarkably well when tested originally on the small sample size, but was not as accurate when testing on larger datasets. The main issue with the color histogram comparison methodology was that the size of the painting frame and the non-painting background in the query images messed up the histogram of the search. Although the scores were still pretty high for the image that matched perfectly, the scores were a little higher for another picture that had more of the background and frame color values. In the future, to improve on the work of the color detector, we could first detect the painting from the query, and only run the color detector on the subset of pixels that form the painting region in the query.
+      The color detection worked remarkably well when tested originally on the small sample size, but was not as accurate when testing on larger datasets. The main issue with the color histogram comparison methodology was that the size of the painting frame and the non-painting background in the query images messed up the histogram of the search image. Although the scores were still pretty high for the image that matched perfectly, the scores tended to be a little higher for other pictures that had more of the background and frame color values. In the future, to improve on the work of the color detector, we could first detect the painting from the query and only run the color detector on the subset of pixels that form the painting region in the query.
       <br><br>
-      The painting detector’s efficiency could be improved through properly setting appropriate sigma values during Canny Edge Detection for the images in the sample and setting the sigma for the query image as a hyperparameter. In practicality, setting these manually would not be useful. Training a neural net to output an appropriate sigma for an input image could aid in this process. While we were able to get very accurate results we can speed up this process by applying a binary search tree when locating the matched image. Right now we look at all the images when we try to find a match, but if we were to place these images in a graph we can cut down the search time drastically. We did not see a problem with run time for the small dataset that we are using, but if we were to use a huge data set, lookup time could be huge issue. If we were to expand this project, we would create .npy files containing all the information that could be gained from every image of the database to speed up painting recognition as much as possible. On a small scale, however, our system worked very well.
+      The painting detector’s efficiency could be improved through properly setting appropriate sigma values during Canny Edge Detection for the images in the sample and setting the sigma for the query image as a hyperparameter. In practicality, setting these manually would not be useful. Training a neural net to output an appropriate sigma for an input image could aid in this process. While we were able to get very accurate results, we can speed up this process by applying binary search when locating the matched image. Right now we look at all the images when we try to find a match, but if we were to place these images in sorted order, we can cut down the search time drastically. We did not see a problem with run time for the small dataset that we are using, but if we were to use a huge data set, lookup time could be a huge issue. If we were to expand this project, we would create .npy files containing all the information that could be gained from every image of the database to speed up painting recognition as much as possible. On a small scale, however, our system worked very well.
       <br><br>
       Overall, as a group, we are very happy with how our project turned out. We were able to tackle our problem statement and produce accurate, helpful results.
       <br><br>
